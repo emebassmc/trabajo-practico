@@ -1,0 +1,197 @@
+﻿using System;
+using System.Collections.Generic;
+using BE;
+using System.Data.SqlClient;
+using System.Security.Cryptography.X509Certificates;
+
+
+namespace DAL
+{
+    public class clsProfesionalDAL
+    {
+        //Generamos el INSTER, lo que haremos con esto es poder tener el comando SQL para insertar Profesionals.
+        //vamos a utilizar de referencia a la clase Profesional de la capa de negocio en la cual estan las propiedades del Profesional.
+        public bool Insert(clsProfesionalBE profesional)
+        {
+            //utilizaremos el using para cerrar la conexion solo al termina, aunque el proceso se rompa
+
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                //abrimos la conexion a la db y luego abrimos la transacción.
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    string sql =
+                        @"INSERT INTO Profesional(Nombre,Apellido,DNI,Telefono,Email,FechaNacimiento,Matricula,IdEspecialidad) 
+                        VALUES 
+                        (@Nombre,@Apellido,@DNI,@Telefono,@Email,@FechaNacimiento,@Matricula,@IdEspecialidad)";
+                    //ahora ejecutamos el comando que hara que los datos de la clase Profesional de la capa de negocio se "peguen" a las tablas de la DB.
+                    SqlCommand cmd = new SqlCommand(sql, con, tran);
+                    cmd.Parameters.AddWithValue("@Nombre", profesional.Nombre);
+                    cmd.Parameters.AddWithValue("@Apellido", profesional.Apellido);
+                    cmd.Parameters.AddWithValue("@DNI", profesional.DNI);
+                    cmd.Parameters.AddWithValue("@Telefono",
+                        (object)profesional.Telefono ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Email",
+                        (object)profesional.Email ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@FechaNacimiento",
+                        profesional.FechaNacimiento == DateTime.MinValue
+                            ? (object)DBNull.Value
+                            : profesional.FechaNacimiento);
+                    cmd.Parameters.AddWithValue("@Matricula", profesional.Matricula);
+                    cmd.Parameters.AddWithValue("@IdEspecialidad", profesional.IdEspecialidad);
+
+                    cmd.ExecuteNonQuery();
+
+                    //si llegamos hasta este punto confirmamos la transaccion y devolvemos un true, si no tiramos rollback en el catch
+                    tran.Commit();
+                    return true;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    return false;
+                }
+            }
+        }
+
+        public bool Update(clsProfesionalBE Profesional)
+        {
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    //aca va el UPDATE que se hace a la DB recordar siempre que como el IDProfesional es la FK se tomara este para buscarlo con el where
+                    string sql = @"UPDATE Profesional
+                        SET Nombre = @Nombre,
+                            Apellido = @Apellido,
+                            DNI = @DNI,
+                            Telefono = @Telefono,
+                            Email = @Email,
+                            FechaNacimiento = @FechaNacimiento,
+                            Matricula = @Matricula,
+                            IdEspecialidad = @IdEspecialidad
+                            WHERE IdProfesional = @IdProfesional";
+                    //mismo sector de code que el INSERT
+                    SqlCommand cmd = new SqlCommand(sql, con, tran);
+                    cmd.Parameters.AddWithValue("@Nombre", Profesional.Nombre);
+                    cmd.Parameters.AddWithValue("@Apellido", Profesional.Apellido);
+                    cmd.Parameters.AddWithValue("@DNI", Profesional.DNI);
+                    cmd.Parameters.AddWithValue("@Telefono", Profesional.Telefono);
+                    cmd.Parameters.AddWithValue("@Email", Profesional.Email);
+                    cmd.Parameters.AddWithValue("@FechaNacimiento", Profesional.FechaNacimiento);
+                    cmd.Parameters.AddWithValue("@Matricula", Profesional.Matricula);
+                    cmd.Parameters.AddWithValue("@IdEspecialidad", Profesional.IdEspecialidad);
+                    cmd.Parameters.AddWithValue("@IdProfesional", Profesional.IdPersona);
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+
+                }
+                catch
+                {
+                    tran.Rollback();
+                    return false;
+                }
+            }
+        }
+        public bool Delete(int idProfesional)
+        {
+            //para borrar el Profesional solo vamos a necesitar su ID que es la FK de la tabla, por ende solo lo buscamos por este
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand
+                        ("DELETE FROM Profesional WHERE IdProfesional = @IdProfesional", con, tran);
+                    cmd.Parameters.AddWithValue("@IdProfesional", idProfesional);
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    return false;
+                }
+            }
+        }
+        //metodos de solo lectura para mostrar información de la DB, GetById, GetAll, GetByDNI
+        public clsProfesionalBE GetByID(int IdProfesional)
+        {
+            clsProfesionalBE Profesional = null; //si el Profesional esta vacio va a devolver siempre null
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand(
+                    "SELECT * FROM Profesional WHERE IdProfesional = @IdProfesional", con);
+                cmd.Parameters.AddWithValue("@IdProfesional", IdProfesional);
+                SqlDataReader dr = cmd.ExecuteReader();
+                //hacemos un if para pasar el dr.read porque la idea es que nos devuelva una sola fila
+                if (dr.Read())
+                {
+                    Profesional = Mapear(dr);
+                }
+                return Profesional;
+            }
+        }
+        public List<clsProfesionalBE> GetAll()
+        {
+            List<clsProfesionalBE> listaProfesional = new List<clsProfesionalBE>();
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Profesional", con);
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                //while en el drread para traer toda las filas, a diferencia del if en el anterior aca traemos varios datos.
+                while (dr.Read())
+                {
+                    listaProfesional.Add(Mapear(dr));
+                }
+                return listaProfesional;
+            }
+        }
+        public clsProfesionalBE GetByDNI(string dni)
+        {
+            clsProfesionalBE Profesional = null;
+
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand(
+                    "SELECT * FROM Profesional WHERE DNI = @DNI", con);
+                cmd.Parameters.AddWithValue("@DNI", dni);
+
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    Profesional = Mapear(dr);
+                }
+            }
+            return Profesional;
+        }
+        private clsProfesionalBE Mapear(SqlDataReader dr)
+        {
+            return new clsProfesionalBE
+            {
+                // El nombre entre [] tiene que coincidir EXACTO con la columna en SQL
+                IdPersona = (int)dr["IdProfesional"],
+                Nombre = dr["Nombre"].ToString(),
+                Apellido = dr["Apellido"].ToString(),
+                DNI = dr["DNI"].ToString(),
+                Telefono = dr["Telefono"].ToString(),
+                FechaNacimiento = dr["FechaNacimiento"] == DBNull.Value ? DateTime.MinValue : (DateTime)dr["FechaNacimiento"],
+                Email = dr["Email"] == DBNull.Value? "" : dr["Email"].ToString(),
+                Matricula = dr["Matricula"].ToString(),
+                IdEspecialidad = (int)dr["IdEspecialidad"]
+            };
+        }
+
+    }
+} 

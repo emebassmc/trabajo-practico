@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace UI
+{
+    public partial class frmPrincipal : Form
+    {
+        public frmPrincipal()
+        {
+            InitializeComponent();
+        }
+
+        private void turnosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmPacientes frm = new frmPacientes();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void aBMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmTurnos frm = new frmTurnos();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void especialidadesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmEspecialidad frm = new frmEspecialidad();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void profesionalesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmProfesional frm = new frmProfesional();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+    }
+}
