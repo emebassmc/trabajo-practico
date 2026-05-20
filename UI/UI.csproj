@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="forms\frmBitacora.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\frmBitacora.Designer.cs">
+      <DependentUpon>frmBitacora.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\frmEspecialidad.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +90,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="forms\frmBitacora.resx">
+      <DependentUpon>frmBitacora.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="forms\frmEspecialidad.resx">
       <DependentUpon>frmEspecialidad.cs</DependentUpon>
     </EmbeddedResource>
@@ -92,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="forms\frmProfesional.resx">
       <DependentUpon>frmProfesional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="forms\frmTurnos.resx">
+      <DependentUpon>frmTurnos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>

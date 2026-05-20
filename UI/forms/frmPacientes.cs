@@ -37,7 +37,7 @@ namespace UI
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
-        {
+        { 
             if (idSeleccionado <= 0) return;
             DialogResult confirm = MessageBox.Show("¿Está seguro que desea eliminar?",
                 "Confirmar", MessageBoxButtons.YesNo);

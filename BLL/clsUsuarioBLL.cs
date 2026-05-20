@@ -18,8 +18,16 @@ namespace BLL
             clsUsuarioBE usuario = dal.GetByUsername(nombreUsuario);
 
             if(usuario == null) return false;
+                bool resultado = seg.VerificarPassword(password, usuario.PasswordHash);
 
-            return seg.VerificarPassword(password, usuario.PasswordHash);
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = usuario.IdUsuario;
+                b.Actividad = "Login";
+                b.Informacion = resultado ? "OK - " + nombreUsuario : "ERROR - " + nombreUsuario;
+                clsBitacoraBLL.Registrar(b);
+
+
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -36,26 +44,13 @@ namespace BLL
                 if (string.IsNullOrEmpty(usuario.PasswordHash)) return false;
 
                 usuario.PasswordHash = seg.HashPassword(usuario.PasswordHash);
-                return dal.Insert(usuario);
-            }
-            catch (Exception ex)
-            {
-                string a = ex.Message;
-                return false;
-            }
-        }
-        public bool Registrar2(string nombreUsuario, string password)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(nombreUsuario)) return false;
-                if (string.IsNullOrEmpty(password)) return false;
-
-                clsUsuarioBE usuario = new clsUsuarioBE();
-                usuario.NombreUsuario = nombreUsuario;
-                usuario.PasswordHash = seg.HashPassword(password);
-
-                return dal.Insert(usuario);
+                bool resultado = dal.Insert(usuario);
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Registrar Usuario";
+                b.Informacion = resultado ? "OK - Id: " + usuario.IdUsuario: "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
             }
             catch (Exception ex)
             {

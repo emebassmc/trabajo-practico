@@ -16,7 +16,15 @@ namespace BLL
                 if (paciente.DNI.Length != 8) return false;
 
                 clsPacienteDAL dal = new clsPacienteDAL();
-                return dal.Insert(paciente);
+                bool resultado = dal.Insert(paciente);
+
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Insert Paciente";
+                b.Informacion = resultado ? "OK - DNI: " + paciente.DNI : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -33,7 +41,15 @@ namespace BLL
                 if (string.IsNullOrEmpty(pacienteUpdate.Apellido)) return false;
                 if (string.IsNullOrEmpty(pacienteUpdate.DNI) || (pacienteUpdate.DNI.Length != 8)) return false;
                 clsPacienteDAL dal = new clsPacienteDAL();
-                return dal.Update(pacienteUpdate);
+                bool resultado = dal.Update(pacienteUpdate);
+
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Update Paciente";
+                b.Informacion = resultado ? "OK - DNI: " + pacienteUpdate.DNI : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -48,7 +64,15 @@ namespace BLL
             {
                 if (id <= 0) return false;
                 clsPacienteDAL dal = new clsPacienteDAL();
-                return dal.Delete(id); 
+                bool resultado = dal.Delete(id);
+
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Delete Paciente";
+                b.Informacion = resultado ? "OK - Id: " + id : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+
+                return resultado;
             }
             catch (Exception ex)
             {

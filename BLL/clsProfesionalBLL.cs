@@ -23,7 +23,14 @@ namespace BLL
                 if (profesional.DNI.Length != 8) return false;
 
                 clsProfesionalDAL dal = new clsProfesionalDAL();
-                return dal.Insert(profesional);
+                bool resultado = dal.Insert(profesional);
+
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Insert Profesional";
+                b.Informacion = resultado ? "OK - Id: " + profesional.IdPersona : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -43,7 +50,14 @@ namespace BLL
                 if (string.IsNullOrEmpty(profesional.DNI)) return false;
                 if (profesional.DNI.Length != 8) return false;
                 clsProfesionalDAL dal = new clsProfesionalDAL();
-                return dal.Update(profesional);
+                bool resultado = dal.Update(profesional);
+
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Update Profesional";
+                b.Informacion = resultado ? "OK - Id: " + profesional.IdPersona : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -59,7 +73,14 @@ namespace BLL
 
                 if (id <= 0) return false;
                 clsProfesionalDAL dal = new clsProfesionalDAL();
-                return dal.Delete(id);
+                bool resultado = dal.Delete(id);
+
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Delete Profesional";
+                b.Informacion = resultado ? "OK - Id: " + id: "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
             }
             catch (Exception ex)
             {

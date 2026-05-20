@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UI.forms;
 
 namespace UI
 {
@@ -41,6 +42,13 @@ namespace UI
         private void profesionalesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmProfesional frm = new frmProfesional();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void bitacoraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmBitacora frm = new frmBitacora();
             frm.MdiParent = this;
             frm.Show();
         }

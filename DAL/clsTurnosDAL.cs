@@ -164,7 +164,7 @@ namespace DAL
                 con.Open();
                 SqlCommand cmd = new SqlCommand(
                     "SELECT * FROM Turno WHERE IdProfesional = @IdProfesional", con);
-                cmd.Parameters.AddWithValue("@IdPaciente", idProfesional);
+                cmd.Parameters.AddWithValue("@idProfesional", idProfesional);
 
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())

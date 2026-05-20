@@ -13,7 +13,14 @@ namespace BLL
             {
                 if (string.IsNullOrEmpty(especialidad.Nombre)) return false;
                 clsEspecialidadDAL dal = new clsEspecialidadDAL();
-                return dal.Insert(especialidad);
+                bool resultado = dal.Insert(especialidad);
+
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Insert Especialidad";
+                b.Informacion = resultado ? "OK - Id: " + especialidad.IdEspecialidad : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -28,9 +35,16 @@ namespace BLL
                 if ((especialidad.IdEspecialidad <= 0)) return false;
                 if (string.IsNullOrEmpty(especialidad.Nombre)) return false;
 
-                clsEspecialidadDAL dal = new clsEspecialidadDAL();                
-                return dal.Update(especialidad);
-                
+                clsEspecialidadDAL dal = new clsEspecialidadDAL();
+                bool resultado = dal.Update(especialidad);
+
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Update Especialidad";
+                b.Informacion = resultado ? "OK - Id: " + especialidad.IdEspecialidad : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
+
             }
             catch (Exception ex)
             {
@@ -48,7 +62,14 @@ namespace BLL
 
                 clsEspecialidadDAL dal = new clsEspecialidadDAL();
 
-                return dal.Delete(id);
+                bool resultado = dal.Delete(id);
+
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Delete Especialidad";
+                b.Informacion = resultado ? "OK - Id: " + id: "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
 
             }
             catch (Exception ex)

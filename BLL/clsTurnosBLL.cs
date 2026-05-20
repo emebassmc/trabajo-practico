@@ -16,7 +16,13 @@ namespace BLL
                 if(EstaDisponbile(turno.IDProfesional, turno.FechaHora) == false) return false;
 
                 clsTurnosDAL dal = new clsTurnosDAL();
-                return dal.Insert(turno);
+                bool resultado = dal.Insert(turno);
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Insert Turno";
+                b.Informacion = resultado ? "OK - Id: " + turno.IDTurno : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -34,7 +40,13 @@ namespace BLL
                 if (turno == null) return false;
                 if (turno.Estado == EstadoTurnosBE.Cancelado) return false;
                 turno.Estado = EstadoTurnosBE.Cancelado;
-                return dal.Update(turno);
+                bool resultado = dal.Update(turno);
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Cancelar Turno";
+                b.Informacion = resultado ? "OK - Id: " + turno.IDTurno : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -52,7 +64,13 @@ namespace BLL
                 if (turno == null) return false;
                 if (turno.Estado == EstadoTurnosBE.Confirmado) return false;
                 turno.Estado = EstadoTurnosBE.Confirmado;
-                return dal.Update(turno);
+                bool resultado = dal.Update(turno);
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = 1;
+                b.Actividad = "Confirmar Turno";
+                b.Informacion = resultado ? "OK - Id: " + turno.IDTurno : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
             }
             catch (Exception ex)
             {
