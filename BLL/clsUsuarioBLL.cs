@@ -46,7 +46,7 @@ namespace BLL
                 usuario.PasswordHash = seg.HashPassword(usuario.PasswordHash);
                 bool resultado = dal.Insert(usuario);
                 clsBitacoraBE b = new clsBitacoraBE();
-                b.UsuarioId = 1;
+                b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
                 b.Actividad = "Registrar Usuario";
                 b.Informacion = resultado ? "OK - Id: " + usuario.IdUsuario: "ERROR";
                 clsBitacoraBLL.Registrar(b);
@@ -57,6 +57,15 @@ namespace BLL
                 string a = ex.Message;
                 return false;
             }
+        }
+        public clsUsuarioBE GetByUsername(string nombreUsuario)
+        {
+            try
+            {
+                clsUsuarioDAL dal = new clsUsuarioDAL();
+                return dal.GetByUsername(nombreUsuario);
+            }
+            catch (Exception ex) { string v = ex.ToString(); return null; }
         }
     }
 }

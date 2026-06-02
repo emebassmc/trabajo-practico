@@ -1,4 +1,5 @@
-﻿using BLL;
+﻿using BE;
+using BLL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,9 +38,11 @@ namespace UI
             }
 
             bool resultado = usuario.Login(txtUsuario.Text, txtPassword.Text);
-
             if (resultado)
             {
+                clsUsuarioBE u = usuario.GetByUsername(txtUsuario.Text);
+                clsSesionActual.GetInstancia().IdUsuario = u.IdUsuario;
+                clsSesionActual.GetInstancia().NombreUsuario = txtUsuario.Text;
                 frmPrincipal principal = new frmPrincipal();
                 principal.Show();
             }

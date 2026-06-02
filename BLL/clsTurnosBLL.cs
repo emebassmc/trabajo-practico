@@ -18,7 +18,7 @@ namespace BLL
                 clsTurnosDAL dal = new clsTurnosDAL();
                 bool resultado = dal.Insert(turno);
                 clsBitacoraBE b = new clsBitacoraBE();
-                b.UsuarioId = 1;
+                b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
                 b.Actividad = "Insert Turno";
                 b.Informacion = resultado ? "OK - Id: " + turno.IDTurno : "ERROR";
                 clsBitacoraBLL.Registrar(b);
@@ -42,7 +42,7 @@ namespace BLL
                 turno.Estado = EstadoTurnosBE.Cancelado;
                 bool resultado = dal.Update(turno);
                 clsBitacoraBE b = new clsBitacoraBE();
-                b.UsuarioId = 1;
+                b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
                 b.Actividad = "Cancelar Turno";
                 b.Informacion = resultado ? "OK - Id: " + turno.IDTurno : "ERROR";
                 clsBitacoraBLL.Registrar(b);
@@ -66,7 +66,7 @@ namespace BLL
                 turno.Estado = EstadoTurnosBE.Confirmado;
                 bool resultado = dal.Update(turno);
                 clsBitacoraBE b = new clsBitacoraBE();
-                b.UsuarioId = 1;
+                b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
                 b.Actividad = "Confirmar Turno";
                 b.Informacion = resultado ? "OK - Id: " + turno.IDTurno : "ERROR";
                 clsBitacoraBLL.Registrar(b);

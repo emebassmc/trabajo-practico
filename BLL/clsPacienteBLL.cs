@@ -19,7 +19,7 @@ namespace BLL
                 bool resultado = dal.Insert(paciente);
 
                 clsBitacoraBE b = new clsBitacoraBE();
-                b.UsuarioId = 1;
+                b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
                 b.Actividad = "Insert Paciente";
                 b.Informacion = resultado ? "OK - DNI: " + paciente.DNI : "ERROR";
                 clsBitacoraBLL.Registrar(b);
@@ -44,7 +44,7 @@ namespace BLL
                 bool resultado = dal.Update(pacienteUpdate);
 
                 clsBitacoraBE b = new clsBitacoraBE();
-                b.UsuarioId = 1;
+                b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
                 b.Actividad = "Update Paciente";
                 b.Informacion = resultado ? "OK - DNI: " + pacienteUpdate.DNI : "ERROR";
                 clsBitacoraBLL.Registrar(b);
@@ -67,7 +67,7 @@ namespace BLL
                 bool resultado = dal.Delete(id);
 
                 clsBitacoraBE b = new clsBitacoraBE();
-                b.UsuarioId = 1;
+                b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
                 b.Actividad = "Delete Paciente";
                 b.Informacion = resultado ? "OK - Id: " + id : "ERROR";
                 clsBitacoraBLL.Registrar(b);
