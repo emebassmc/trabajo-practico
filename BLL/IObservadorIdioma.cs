@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    public abstract class clsRolComponente
+    public interface IObservadorIdioma
     {
-        public string Nombre { get; set; }
-        public abstract bool TienePermiso(string accion);
+        void ActualizarIdioma(string Idioma);
     }
 }

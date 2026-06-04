@@ -3,15 +3,58 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Security.Cryptography;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DAL
 {
     public class clsRolDAL
-    {
+    {          
+        //Generamos el INSTER, lo que haremos con esto es poder tener el comando SQL para insertar Profesionals.
+        //vamos a utilizar de referencia a la clase Profesional de la capa de negocio en la cual estan
+        //las propiedades del Rol.
         public bool Insert(clsRolBE rol)
+        {
+            //utilizaremos el using para cerrar la conexion solo al termina, aunque el proceso se rompa
+
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                //abrimos la conexion a la db y luego abrimos la transacción.
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    string sql =
+                        @"INSERT INTO Rol(IdRolPadre,Nombre,EsGrupo) 
+                        VALUES 
+                        (@IdRolPadre,@Nombre,@EsGrupo)";
+                    //ahora ejecutamos el comando que hara que los datos de la clase Profesional
+                    //de la capa de negocio se "peguen" a las tablas de la DB.
+                    SqlCommand cmd = new SqlCommand(sql, con, tran);
+                    cmd.Parameters.AddWithValue("@IdRolPadre",
+                        rol.IdRolPadre.HasValue ? (object)rol.IdRolPadre.Value : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Nombre", rol.Nombre);
+                    cmd.Parameters.AddWithValue("@EsGrupo", rol.EsGrupo);
+
+                    cmd.ExecuteNonQuery();
+
+                    //si llegamos hasta este punto confirmamos la transaccion y devolvemos un true,
+                    //si no tiramos rollback en el catch
+                    tran.Commit();
+                    return true;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    return false;
+                }
+            }
+        }
+
+
+
+        public bool Delete(int idrol)
         {
             using (SqlConnection con = clsConexionDAL.GetConnection())
             {
@@ -19,14 +62,9 @@ namespace DAL
                 SqlTransaction tran = con.BeginTransaction();
                 try
                 {
-                    string sql = @"INSERT INTO Rol(Nombre, IdRolPadre)
-                    VALUES
-                    (@Nombre, @IdRolPadre)
-                    ";
-                    SqlCommand cmd = new SqlCommand(sql,con,tran);
-                    cmd.Parameters.AddWithValue("@Nombre", rol.Nombre);
-                    cmd.Parameters.AddWithValue("@IdRolPadre",
-                        rol.IdRolPadre.HasValue ? (object)rol.IdRolPadre.Value : DBNull.Value);
+                    SqlCommand cmd = new SqlCommand
+                        ("DELETE FROM Rol WHERE IdRol = @IdRol", con, tran);
+                    cmd.Parameters.AddWithValue("@IdRol", idrol);
                     cmd.ExecuteNonQuery();
                     tran.Commit();
                     return true;
@@ -38,55 +76,101 @@ namespace DAL
                 }
             }
         }
-        public bool Delete(int id)
-        {
-            using (SqlConnection con = clsConexionDAL.GetConnection())
-            {
-                con.Open();
-                SqlTransaction tran = con.BeginTransaction();
-                try
-                {
-                    SqlCommand cmd = new SqlCommand(@"DELETE FROM Rol WHERE IdRol = @IdRol", con, tran);
-                    cmd.Parameters.AddWithValue("@IdRol", id);
-                    cmd.ExecuteNonQuery();
-                    tran.Commit();
-                    return true;
-                }
-                catch
-                {
-
-                    tran.Rollback();
-
-                    return false;
-                }
-            }               
-        }
         public List<clsRolBE> GetAll()
         {
-            List<clsRolBE> listaRoles = new List<clsRolBE>();
+            List<clsRolBE> lstRol = new List<clsRolBE>();
             using (SqlConnection con = clsConexionDAL.GetConnection())
             {
                 con.Open();
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Rol", con);
                 SqlDataReader dr = cmd.ExecuteReader();
 
+                //while en el drread para traer toda las filas, a diferencia del if en el anterior aca traemos varios datos.
                 while (dr.Read())
                 {
-                    listaRoles.Add(Mapear(dr));
+                    lstRol.Add(Mapear(dr));
                 }
-                return listaRoles;
+                return lstRol;
             }
+        }
+        public bool AsignarRolUsuario(int idUsuario, int idRol)
+        {
+            using (SqlConnection con = clsConexionDAL.GetConnection()) 
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction(); 
+                try
+                {
+                    string sql = @"INSERT INTO UsuarioRol (IdUsuario, IdRol)
+                           VALUES (@IdUsuario, @IdRol)";
+                    SqlCommand cmd = new SqlCommand(sql, con, tran); 
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                    cmd.Parameters.AddWithValue("@IdRol", idRol);
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    return false;
+                }
+            }
+        }
+        public bool QuitarRolUsuario(int idUsuario, int idRol)
+        {
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    string sql = @"DELETE FROM UsuarioRol 
+                                 WHERE IdUsuario = @IdUsuario AND IdRol = @IdRol";
+                    SqlCommand cmd = new SqlCommand(sql, con, tran);
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                    cmd.Parameters.AddWithValue("@IdRol", idRol);
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    return false;
+                }
+            }
+        }
+        public List<clsRolBE> GetRolesPorUsuario(int idUsuario)
+        {
+            List<clsRolBE> lista = new List<clsRolBE>();
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand(
+                    @"SELECT r.* FROM Rol r
+              INNER JOIN UsuarioRol ur ON r.IdRol = ur.IdRol
+              WHERE ur.IdUsuario = @IdUsuario", con);
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    lista.Add(Mapear(dr));
+                }
+            }
+            return lista;
         }
         private clsRolBE Mapear(SqlDataReader dr)
         {
             return new clsRolBE
             {
+                // El nombre entre [] tiene que coincidir EXACTO con la columna en SQL
                 IdRol = (int)dr["IdRol"],
                 Nombre = dr["Nombre"].ToString(),
-                IdRolPadre = dr["IdRolPadre"] == DBNull.Value
-                     ? (int?)null
-                     : (int)dr["IdRolPadre"]
+                IdRolPadre = dr["IdRolPadre"] == DBNull.Value ? (int?)null : (int)dr["IdRolPadre"],
+                EsGrupo = (bool)dr["EsGrupo"]
             };
         }
     }
 }
+

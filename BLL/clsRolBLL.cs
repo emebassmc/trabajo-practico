@@ -2,73 +2,79 @@
 using DAL;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Management.Instrumentation;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BLL
 {
-    public class clsRolBLL
+    public class clsRolBLL 
     {
-        clsRolDAL dal = new clsRolDAL();
+        private clsRolDAL dal;
 
-        public bool Insert(clsRolBE rol)
+        public clsRolBLL()
         {
-            try
-            {
-                if (string.IsNullOrEmpty(rol.Nombre)) return false;
-                bool resultado = dal.Insert(rol);
-                clsBitacoraBE b = new clsBitacoraBE();
-                b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
-                b.Actividad = "Insert Rol";
-                b.Informacion = resultado ? "OK - IDRol: " + rol.Nombre: "ERROR";
-                clsBitacoraBLL.Registrar(b);
-                return dal.Insert(rol);
-            }
-            catch (Exception ex) { string v = ex.ToString(); return false; }
-        }
-
-        public bool Delete(int id)
-        {
-            try
-            {
-                if (id <= 0) return false;
-                bool resultado = dal.Delete(id);
-                clsBitacoraBE b = new clsBitacoraBE();
-                b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
-                b.Actividad = "Delete Rol";
-                b.Informacion = resultado ? "OK - ID: " + id: "ERROR";
-                clsBitacoraBLL.Registrar(b);
-                return dal.Delete(id);
-            }
-            catch (Exception ex) { string v = ex.ToString(); return false; }
+            dal = new clsRolDAL();
         }
 
         public List<clsRolBE> GetAll()
         {
-            try { return dal.GetAll(); }
-            catch (Exception ex) { string v = ex.ToString(); return null; }
+            return dal.GetAll();
+        }
+        public bool Insert(clsRolBE rol)
+        {
+            if (string.IsNullOrEmpty(rol.Nombre)) { return false; }
+            return dal.Insert(rol);
+        }
+        public bool Delete(int id)
+        {
+            if (id <= 0 ) { return false; }
+            return dal.Delete(id);
         }
 
-        public clsRolComponente GetArbol()
+        public IComponenteRol GetArbol()
         {
-            try
+            List<clsRolBE> todos = dal.GetAll();
+            Dictionary<int, IComponenteRol> mapa= new Dictionary<int, IComponenteRol>();
+            foreach (clsRolBE r in todos)
             {
-                var lista = dal.GetAll();
-                clsRolGrupo raiz = new clsRolGrupo("Sistema");
-
-                Dictionary<int, clsRolGrupo> grupos = new Dictionary<int, clsRolGrupo>();
-                foreach (var rol in lista)
-                    grupos[rol.IdRol] = new clsRolGrupo(rol.Nombre);
-
-                foreach (var rol in lista)
-                {
-                    if (rol.IdRolPadre == null)
-                        raiz.Agregar(grupos[rol.IdRol]);
-                    else
-                        grupos[rol.IdRolPadre.Value].Agregar(grupos[rol.IdRol]);
-                }
-
-                return raiz;
+                if (r.EsGrupo)
+                    mapa[r.IdRol] = new csRolGrupo { IdRol = r.IdRol, Nombre = r.Nombre };
+                else
+                    mapa[r.IdRol] = new csRolSimple { IdRol = r.IdRol, Nombre = r.Nombre };
             }
-            catch (Exception ex) { string v = ex.ToString(); return null; }
+            IComponenteRol raiz = null;
+            foreach (clsRolBE r in todos)
+            {
+                if (r.IdRolPadre == null)
+                {
+                    raiz = mapa[r.IdRol];
+                }
+                else
+                {
+                    csRolGrupo padre = (csRolGrupo)mapa[r.IdRolPadre.Value];
+                    padre.Agregar(mapa[r.IdRol]);
+                }
+            }
+            return raiz;
+        }
+        public bool AsignarARol(int IdUsuario, int IdRol)
+        {
+            if (IdUsuario <= 0) return false;
+            if (IdRol <= 0) return false;   
+            return dal.AsignarRolUsuario(IdUsuario, IdRol);
+        }
+        public bool QuitarRolUsuario(int IdUsuario, int IdRol)
+        {
+            if (IdUsuario <= 0) return false;
+            if (IdRol <= 0) return false;
+            return dal.QuitarRolUsuario(IdUsuario, IdRol);
+        }
+        public List<clsRolBE> GetRolesUsuario(int IdUsuario)
+        {
+            if (IdUsuario <= 0) return new List<clsRolBE>();
+            return dal.GetRolesPorUsuario(IdUsuario);
         }
     }
 }
