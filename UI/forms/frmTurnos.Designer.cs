@@ -30,6 +30,11 @@
         {
             System.Windows.Forms.Label lblEspecialidades;
             this.Turnos = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtObservaciones = new System.Windows.Forms.TextBox();
+            this.btnCancelarForm = new System.Windows.Forms.Button();
+            this.cbmProfesional = new System.Windows.Forms.ComboBox();
+            this.cmbPaciente = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbEstado = new System.Windows.Forms.ComboBox();
             this.btnNuevo = new System.Windows.Forms.Button();
@@ -39,16 +44,20 @@
             this.lblNombreProfesional = new System.Windows.Forms.Label();
             this.btnCancelar = new System.Windows.Forms.Button();
             this.dtpFechaTurno = new System.Windows.Forms.DateTimePicker();
-            this.cmbPaciente = new System.Windows.Forms.ComboBox();
-            this.cbmProfesional = new System.Windows.Forms.ComboBox();
-            this.btnCancelarForm = new System.Windows.Forms.Button();
             this.dgvTurnos = new System.Windows.Forms.DataGridView();
-            this.txtObservaciones = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             lblEspecialidades = new System.Windows.Forms.Label();
             this.Turnos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTurnos)).BeginInit();
             this.SuspendLayout();
+            // 
+            // lblEspecialidades
+            // 
+            lblEspecialidades.AutoSize = true;
+            lblEspecialidades.Location = new System.Drawing.Point(22, 91);
+            lblEspecialidades.Name = "lblEspecialidades";
+            lblEspecialidades.Size = new System.Drawing.Size(40, 13);
+            lblEspecialidades.TabIndex = 23;
+            lblEspecialidades.Text = "Estado";
             // 
             // Turnos
             // 
@@ -74,14 +83,50 @@
             this.Turnos.TabStop = false;
             this.Turnos.Text = "Turnos";
             // 
-            // lblEspecialidades
+            // label2
             // 
-            lblEspecialidades.AutoSize = true;
-            lblEspecialidades.Location = new System.Drawing.Point(22, 91);
-            lblEspecialidades.Name = "lblEspecialidades";
-            lblEspecialidades.Size = new System.Drawing.Size(40, 13);
-            lblEspecialidades.TabIndex = 23;
-            lblEspecialidades.Text = "Estado";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 144);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(78, 13);
+            this.label2.TabIndex = 28;
+            this.label2.Text = "Observaciones";
+            // 
+            // txtObservaciones
+            // 
+            this.txtObservaciones.Location = new System.Drawing.Point(90, 141);
+            this.txtObservaciones.Name = "txtObservaciones";
+            this.txtObservaciones.Size = new System.Drawing.Size(96, 20);
+            this.txtObservaciones.TabIndex = 27;
+            this.txtObservaciones.TextChanged += new System.EventHandler(this.txtObservaciones_TextChanged);
+            // 
+            // btnCancelarForm
+            // 
+            this.btnCancelarForm.Location = new System.Drawing.Point(177, 227);
+            this.btnCancelarForm.Name = "btnCancelarForm";
+            this.btnCancelarForm.Size = new System.Drawing.Size(115, 23);
+            this.btnCancelarForm.TabIndex = 26;
+            this.btnCancelarForm.Text = "Cancelar Form";
+            this.btnCancelarForm.UseVisualStyleBackColor = true;
+            this.btnCancelarForm.Click += new System.EventHandler(this.btnCancelarForm_Click);
+            // 
+            // cbmProfesional
+            // 
+            this.cbmProfesional.FormattingEnabled = true;
+            this.cbmProfesional.Location = new System.Drawing.Point(90, 55);
+            this.cbmProfesional.Name = "cbmProfesional";
+            this.cbmProfesional.Size = new System.Drawing.Size(96, 21);
+            this.cbmProfesional.TabIndex = 25;
+            this.cbmProfesional.SelectedIndexChanged += new System.EventHandler(this.cbmProfesional_SelectedIndexChanged);
+            // 
+            // cmbPaciente
+            // 
+            this.cmbPaciente.FormattingEnabled = true;
+            this.cmbPaciente.Location = new System.Drawing.Point(90, 28);
+            this.cmbPaciente.Name = "cmbPaciente";
+            this.cmbPaciente.Size = new System.Drawing.Size(96, 21);
+            this.cmbPaciente.TabIndex = 24;
+            this.cmbPaciente.SelectedIndexChanged += new System.EventHandler(this.cmbPaciente_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -168,34 +213,6 @@
             this.dtpFechaTurno.TabIndex = 6;
             this.dtpFechaTurno.ValueChanged += new System.EventHandler(this.dtpFechaTurno_ValueChanged);
             // 
-            // cmbPaciente
-            // 
-            this.cmbPaciente.FormattingEnabled = true;
-            this.cmbPaciente.Location = new System.Drawing.Point(90, 28);
-            this.cmbPaciente.Name = "cmbPaciente";
-            this.cmbPaciente.Size = new System.Drawing.Size(96, 21);
-            this.cmbPaciente.TabIndex = 24;
-            this.cmbPaciente.SelectedIndexChanged += new System.EventHandler(this.cmbPaciente_SelectedIndexChanged);
-            // 
-            // cbmProfesional
-            // 
-            this.cbmProfesional.FormattingEnabled = true;
-            this.cbmProfesional.Location = new System.Drawing.Point(90, 55);
-            this.cbmProfesional.Name = "cbmProfesional";
-            this.cbmProfesional.Size = new System.Drawing.Size(96, 21);
-            this.cbmProfesional.TabIndex = 25;
-            this.cbmProfesional.SelectedIndexChanged += new System.EventHandler(this.cbmProfesional_SelectedIndexChanged);
-            // 
-            // btnCancelarForm
-            // 
-            this.btnCancelarForm.Location = new System.Drawing.Point(177, 227);
-            this.btnCancelarForm.Name = "btnCancelarForm";
-            this.btnCancelarForm.Size = new System.Drawing.Size(115, 23);
-            this.btnCancelarForm.TabIndex = 26;
-            this.btnCancelarForm.Text = "Cancelar Form";
-            this.btnCancelarForm.UseVisualStyleBackColor = true;
-            this.btnCancelarForm.Click += new System.EventHandler(this.btnCancelarForm_Click);
-            // 
             // dgvTurnos
             // 
             this.dgvTurnos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -204,23 +221,6 @@
             this.dgvTurnos.Size = new System.Drawing.Size(397, 278);
             this.dgvTurnos.TabIndex = 4;
             this.dgvTurnos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTurnos_CellContentClick);
-            // 
-            // txtObservaciones
-            // 
-            this.txtObservaciones.Location = new System.Drawing.Point(90, 141);
-            this.txtObservaciones.Name = "txtObservaciones";
-            this.txtObservaciones.Size = new System.Drawing.Size(96, 20);
-            this.txtObservaciones.TabIndex = 27;
-            this.txtObservaciones.TextChanged += new System.EventHandler(this.txtObservaciones_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 144);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 13);
-            this.label2.TabIndex = 28;
-            this.label2.Text = "Observaciones";
             // 
             // frmTurnos
             // 
@@ -231,6 +231,7 @@
             this.Controls.Add(this.Turnos);
             this.Name = "frmTurnos";
             this.Text = "frmTurnos";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmTurnos_FormClosed);
             this.Load += new System.EventHandler(this.frmTurnos_Load);
             this.Turnos.ResumeLayout(false);
             this.Turnos.PerformLayout();

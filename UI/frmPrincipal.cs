@@ -12,7 +12,7 @@ using UI.forms;
 
 namespace UI
 {
-    public partial class frmPrincipal : Form
+    public partial class frmPrincipal : Form , IObservadorIdioma
     {
         clsRolBLL rolBll = new clsRolBLL();
         public frmPrincipal()
@@ -95,7 +95,8 @@ namespace UI
 
         private void frmPrincipal_Load(object sender, EventArgs e)
         {
-
+            clsGestorIdioma.GetInstancia().Suscribir(this);
+            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
         }
 
         private void consultasToolStripMenuItem_Click(object sender, EventArgs e)
@@ -123,6 +124,42 @@ namespace UI
             frmUsuario frm = new frmUsuario();
             frm.MdiParent = this;
             frm.Show();
+        }
+        public void ActualizarIdioma(string idioma)
+        {
+            if (idioma == "es")
+            {
+                inicioToolStripMenuItem.Text = "Gestiones";
+                informesToolStripMenuItem.Text = "Informes";
+                salirToolStripMenuItem.Text = "Salir";
+                pacientesToolStripMenuItem.Text = "Pacientes";
+                especialidadesToolStripMenuItem.Text = "Especialidades";
+                profesionalesToolStripMenuItem.Text = "Profesionales";
+                aBMToolStripMenuItem.Text = "Turnos";
+                rolesToolStripMenuItem.Text = "Roles";
+                usuariosToolStripMenuItem.Text = "Usuarios";
+                bitacoraToolStripMenuItem.Text = "Bitácora";
+                consultasToolStripMenuItem.Text = "Consultas";
+            }
+            else if (idioma == "en")
+            {
+                inicioToolStripMenuItem.Text = "Management";
+                informesToolStripMenuItem.Text = "Reports";
+                salirToolStripMenuItem.Text = "Exit";
+                pacientesToolStripMenuItem.Text = "Patients";
+                especialidadesToolStripMenuItem.Text = "Specialties";
+                profesionalesToolStripMenuItem.Text = "Professionals";
+                aBMToolStripMenuItem.Text = "Appointments";
+                rolesToolStripMenuItem.Text = "Roles";
+                usuariosToolStripMenuItem.Text = "Users";
+                bitacoraToolStripMenuItem.Text = "Activity Log";
+                consultasToolStripMenuItem.Text = "Queries";
+            }
+        }
+
+        private void frmPrincipal_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clsGestorIdioma.GetInstancia().Desuscribir(this);
         }
     }
      

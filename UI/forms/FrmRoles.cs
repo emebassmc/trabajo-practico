@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace UI.forms
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form, IObservadorIdioma
     {
         clsRolBLL bll =new clsRolBLL();
         clsUsuarioBLL usuarioBLL =new clsUsuarioBLL();
@@ -208,6 +208,8 @@ namespace UI.forms
             CargarTodosLosRoles();
             CargarRolesParaUsuario();
             CargarUsuarios();
+            clsGestorIdioma.GetInstancia().Suscribir(this);
+            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -231,6 +233,35 @@ namespace UI.forms
                 clsRolBE rol = chkLstRoles.Items[i] as clsRolBE;
                 bool esHijo = rol.IdRolPadre.HasValue && rol.IdRolPadre.Value == grupo.IdRol;
                 chkLstRoles.SetItemChecked(i, esHijo);
+            }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clsGestorIdioma.GetInstancia().Desuscribir(this);
+
+        }
+        public void ActualizarIdioma(string idioma)
+        {
+            if (idioma == "es")
+            {
+                tabPage1.Text = "Grupos";
+                tabPage2.Text = "Usuarios";
+                btnCrearGrupo.Text = "Crear";
+                btnEliminarGrupo.Text = "Eliminar";
+                btnActualizarAsignacion.Text = "Actualizar";
+                btnGuardarUsuario.Text = "Guardar";
+                this.Text = "Roles";
+            }
+            else if (idioma == "en")
+            {
+                tabPage1.Text = "Groups";
+                tabPage2.Text = "Users";
+                btnCrearGrupo.Text = "Create";
+                btnEliminarGrupo.Text = "Delete";
+                btnActualizarAsignacion.Text = "Update";
+                btnGuardarUsuario.Text = "Save";
+                this.Text = "Roles";
             }
         }
     }

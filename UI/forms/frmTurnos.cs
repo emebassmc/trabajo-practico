@@ -12,7 +12,7 @@ using BE;
 
 namespace UI
 {
-    public partial class frmTurnos : Form
+    public partial class frmTurnos : Form, IObservadorIdioma
     {
         clsTurnosBLL bllTurnos = new clsTurnosBLL();
         clsPacienteBLL bllPaciente = new clsPacienteBLL();
@@ -32,6 +32,8 @@ namespace UI
             cargarGrilla();
             bloquearCampos();
             personalizarGrilla();
+            clsGestorIdioma.GetInstancia().Suscribir(this);
+            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
         }
 
 
@@ -231,6 +233,62 @@ namespace UI
             cmbEstado.SelectedIndex = 0;
             dtpFechaTurno.Value = DateTime.Now;
             idSeleccionado = 0;
+        }
+
+        private void frmTurnos_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clsGestorIdioma.GetInstancia().Desuscribir(this);
+        }
+        public void ActualizarIdioma(string idioma)
+        {
+            if (idioma == "es")
+            {
+                Turnos.Text = "Turnos";
+                label1.Text = "Paciente";
+                lblNombreProfesional.Text = "Profesional";
+                label7.Text = "Fecha de turno";
+                label2.Text = "Observaciones";
+                btnNuevo.Text = "Nuevo";
+                btnGuardar.Text = "Guardar";
+                btnConfirmar.Text = "Confirmar";
+                btnCancelar.Text = "Cancelar";
+                btnCancelarForm.Text = "Cancelar Form";
+                this.Text = "Turnos";
+
+                if (dgvTurnos.Columns.Count > 0)
+                {
+                    dgvTurnos.Columns["IDTurno"].HeaderText = "ID";
+                    dgvTurnos.Columns["IDPaciente"].HeaderText = "Paciente";
+                    dgvTurnos.Columns["IDProfesional"].HeaderText = "Profesional";
+                    dgvTurnos.Columns["FechaHora"].HeaderText = "Fecha y Hora";
+                    dgvTurnos.Columns["Estado"].HeaderText = "Estado";
+                    dgvTurnos.Columns["Observaciones"].HeaderText = "Observaciones";
+                }
+            }
+            else if (idioma == "en")
+            {
+                Turnos.Text = "Appointments";
+                label1.Text = "Patient";
+                lblNombreProfesional.Text = "Professional";
+                label7.Text = "Appointment Date";
+                label2.Text = "Notes";
+                btnNuevo.Text = "New";
+                btnGuardar.Text = "Save";
+                btnConfirmar.Text = "Confirm";
+                btnCancelar.Text = "Cancel";
+                btnCancelarForm.Text = "Cancel Form";
+                this.Text = "Appointments";
+
+                if (dgvTurnos.Columns.Count > 0)
+                {
+                    dgvTurnos.Columns["IDTurno"].HeaderText = "ID";
+                    dgvTurnos.Columns["IDPaciente"].HeaderText = "Patient";
+                    dgvTurnos.Columns["IDProfesional"].HeaderText = "Professional";
+                    dgvTurnos.Columns["FechaHora"].HeaderText = "Date & Time";
+                    dgvTurnos.Columns["Estado"].HeaderText = "Status";
+                    dgvTurnos.Columns["Observaciones"].HeaderText = "Notes";
+                }
+            }
         }
     }
 }

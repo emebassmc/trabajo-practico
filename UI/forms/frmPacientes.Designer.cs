@@ -111,9 +111,9 @@
             // 
             // btnEliminar
             // 
-            this.btnEliminar.Location = new System.Drawing.Point(252, 308);
+            this.btnEliminar.Location = new System.Drawing.Point(116, 272);
             this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(115, 23);
+            this.btnEliminar.Size = new System.Drawing.Size(152, 23);
             this.btnEliminar.TabIndex = 17;
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = true;
@@ -122,7 +122,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(46, 191);
+            this.label7.Location = new System.Drawing.Point(45, 189);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(106, 13);
             this.label7.TabIndex = 16;
@@ -194,35 +194,35 @@
             // 
             // dtpFechaNacimiento
             // 
-            this.dtpFechaNacimiento.Location = new System.Drawing.Point(158, 185);
+            this.dtpFechaNacimiento.Location = new System.Drawing.Point(172, 185);
             this.dtpFechaNacimiento.Name = "dtpFechaNacimiento";
             this.dtpFechaNacimiento.Size = new System.Drawing.Size(96, 20);
             this.dtpFechaNacimiento.TabIndex = 6;
             // 
             // txtObraSocial
             // 
-            this.txtObraSocial.Location = new System.Drawing.Point(154, 149);
+            this.txtObraSocial.Location = new System.Drawing.Point(172, 153);
             this.txtObraSocial.Name = "txtObraSocial";
             this.txtObraSocial.Size = new System.Drawing.Size(99, 20);
             this.txtObraSocial.TabIndex = 5;
             // 
             // txtMail
             // 
-            this.txtMail.Location = new System.Drawing.Point(154, 123);
+            this.txtMail.Location = new System.Drawing.Point(172, 123);
             this.txtMail.Name = "txtMail";
             this.txtMail.Size = new System.Drawing.Size(99, 20);
             this.txtMail.TabIndex = 4;
             // 
             // txtTelefono
             // 
-            this.txtTelefono.Location = new System.Drawing.Point(154, 97);
+            this.txtTelefono.Location = new System.Drawing.Point(172, 97);
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(99, 20);
             this.txtTelefono.TabIndex = 3;
             // 
             // txtDNI
             // 
-            this.txtDNI.Location = new System.Drawing.Point(154, 71);
+            this.txtDNI.Location = new System.Drawing.Point(172, 71);
             this.txtDNI.Name = "txtDNI";
             this.txtDNI.Size = new System.Drawing.Size(99, 20);
             this.txtDNI.TabIndex = 2;
@@ -230,14 +230,14 @@
             // 
             // txtApellido
             // 
-            this.txtApellido.Location = new System.Drawing.Point(154, 45);
+            this.txtApellido.Location = new System.Drawing.Point(172, 45);
             this.txtApellido.Name = "txtApellido";
             this.txtApellido.Size = new System.Drawing.Size(99, 20);
             this.txtApellido.TabIndex = 1;
             // 
             // txtNombre
             // 
-            this.txtNombre.Location = new System.Drawing.Point(154, 19);
+            this.txtNombre.Location = new System.Drawing.Point(172, 19);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(99, 20);
             this.txtNombre.TabIndex = 0;
@@ -252,6 +252,7 @@
             this.Controls.Add(this.dgvPacientes);
             this.Name = "frmPacientes";
             this.Text = "frmPacientes1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmPacientes_FormClosed);
             this.Load += new System.EventHandler(this.frmPacientes_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPacientes)).EndInit();
             this.groupBox1.ResumeLayout(false);

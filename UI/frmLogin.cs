@@ -7,13 +7,14 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace UI
 {
-    public partial class frmLogin : Form
+    public partial class frmLogin : Form, IObservadorIdioma
     {
         clsUsuarioBLL usuario = new clsUsuarioBLL();
         public frmLogin()
@@ -24,6 +25,9 @@ namespace UI
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            cmbIdioma.SelectedIndex = 0;
+            clsGestorIdioma.GetInstancia().Suscribir(this);
+            personalizarForm();
 
         }
 
@@ -51,5 +55,87 @@ namespace UI
                 label3.Visible = true;
             }
         }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbIdioma.SelectedItem == null) return;
+            clsGestorIdioma.GetInstancia().CambiarIdioma(cmbIdioma.SelectedItem.ToString());
+        }
+
+        private void personalizarForm()
+        {
+            this.BackColor = Color.FromArgb(45, 62, 80);
+            this.Text = "TurnoSync — Login";
+
+            lblUsuario.ForeColor = Color.White;
+            lblUsuario.Font = new Font("Segoe UI", 10);
+            lblContraseña.ForeColor = Color.White;
+            lblContraseña.Font = new Font("Segoe UI", 10);
+            lblIdioma.ForeColor = Color.White;
+            lblIdioma.Font = new Font("Segoe UI", 10);
+            label3.ForeColor = Color.FromArgb(231, 76, 60);
+            label3.Font = new Font("Segoe UI", 9);
+
+            txtUsuario.Font = new Font("Segoe UI", 10);
+            txtUsuario.BorderStyle = BorderStyle.FixedSingle;
+            txtPassword.Font = new Font("Segoe UI", 10);
+            txtPassword.BorderStyle = BorderStyle.FixedSingle;
+
+            button1.BackColor = Color.FromArgb(52, 152, 219);
+            button1.ForeColor = Color.White;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.FlatAppearance.BorderSize = 0;
+            button1.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            button1.Cursor = Cursors.Hand;
+
+            cmbIdioma.Font = new Font("Segoe UI", 9);
+        }
+        public void ActualizarIdioma(string idioma)
+        {
+            if (idioma == "es")
+            {
+                lblUsuario.Text = "Usuario";
+                lblContraseña.Text = "Contraseña";
+                lblIdioma.Text = "Idioma";
+                button1.Text = "Ingresar";
+            }
+            else if (idioma == "en")
+            {
+                lblUsuario.Text = "Username";
+                lblContraseña.Text = "Password";
+                lblIdioma.Text = "Language";
+                button1.Text = "Login";
+            }
+        }
+        private void lblIdioma_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblUsuario_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblContraseña_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void frmLogin_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+        }
+
+        private void frmLogin_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clsGestorIdioma.GetInstancia().Desuscribir(this);
+        }
+
     }
 }

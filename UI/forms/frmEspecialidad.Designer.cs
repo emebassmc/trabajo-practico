@@ -129,6 +129,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "frmEspecialidad";
             this.Text = "ABM-Especialidad";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmEspecialidad_FormClosed);
             this.Load += new System.EventHandler(this.frmEspecialidad_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);

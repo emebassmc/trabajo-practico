@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace UI.forms
 {
-    public partial class frmUsuario : Form
+    public partial class frmUsuario : Form, IObservadorIdioma
     {
         clsUsuarioBLL usuarioBLL = new clsUsuarioBLL();
         public frmUsuario()
@@ -24,6 +24,8 @@ namespace UI.forms
         {
             CargarUsuarios();
             personalizarGrilla();
+            clsGestorIdioma.GetInstancia().Suscribir(this);
+            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
 
         }
 
@@ -126,6 +128,44 @@ namespace UI.forms
             dgvUsuarios.Columns["PasswordHash"].Visible = false;
             dgvUsuarios.Columns["IdUsuario"].FillWeight = 30;
             dgvUsuarios.Columns["NombreUsuario"].FillWeight = 170;
+        }
+
+        private void frmUsuario_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clsGestorIdioma.GetInstancia().Desuscribir(this);
+        }
+        public void ActualizarIdioma(string idioma)
+        {
+            if (idioma == "es")
+            {
+                grpUsuarios.Text = "Usuarios";
+                lblNombre.Text = "Usuario";
+                label2.Text = "Clave";
+                btnAlta.Text = "Alta";
+                btnBaja.Text = "Baja";
+                this.Text = "Gestor | Usuarios";
+
+                if (dgvUsuarios.Columns.Count > 0)
+                {
+                    dgvUsuarios.Columns["IdUsuario"].HeaderText = "ID";
+                    dgvUsuarios.Columns["NombreUsuario"].HeaderText = "Usuario";
+                }
+            }
+            else if (idioma == "en")
+            {
+                grpUsuarios.Text = "Users";
+                lblNombre.Text = "Username";
+                label2.Text = "Password";
+                btnAlta.Text = "Add";
+                btnBaja.Text = "Remove";
+                this.Text = "Manager | Users";
+
+                if (dgvUsuarios.Columns.Count > 0)
+                {
+                    dgvUsuarios.Columns["IdUsuario"].HeaderText = "ID";
+                    dgvUsuarios.Columns["NombreUsuario"].HeaderText = "Username";
+                }
+            }
         }
     }
 }

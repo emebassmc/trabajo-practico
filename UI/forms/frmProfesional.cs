@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace UI
 {
-    public partial class frmProfesional : Form
+    public partial class frmProfesional : Form, IObservadorIdioma
     {
         clsProfesionalBLL bllprofesional = new clsProfesionalBLL();
         bool modoEdicion = false;
@@ -28,6 +28,8 @@ namespace UI
             cargarCombo();
             cargarGrilla();
             bloquearCampos();
+            clsGestorIdioma.GetInstancia().Suscribir(this);
+            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
         }
 
         public void cargarGrilla()
@@ -175,6 +177,48 @@ namespace UI
                 modoEdicion = true;
                 habilitarCampos();
                 btnEliminar.Enabled = true;
+            }
+        }
+
+        private void frmProfesional_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clsGestorIdioma.GetInstancia().Desuscribir(this);
+        }
+        public void ActualizarIdioma(string idioma)
+        {
+            if (idioma == "es")
+            {
+                // labels y botones que ya tenés...
+
+                if (dataGridView1.Columns.Count > 0)
+                {
+                    dataGridView1.Columns["IdProfesional"].HeaderText = "ID";
+                    dataGridView1.Columns["Nombre"].HeaderText = "Nombre";
+                    dataGridView1.Columns["Apellido"].HeaderText = "Apellido";
+                    dataGridView1.Columns["DNI"].HeaderText = "DNI";
+                    dataGridView1.Columns["Telefono"].HeaderText = "Teléfono";
+                    dataGridView1.Columns["Email"].HeaderText = "Email";
+                    dataGridView1.Columns["FechaNacimiento"].HeaderText = "Fecha Nac.";
+                    dataGridView1.Columns["Matricula"].HeaderText = "Matrícula";
+                    dataGridView1.Columns["IdEspecialidad"].HeaderText = "Especialidad";
+                }
+            }
+            else if (idioma == "en")
+            {
+                // labels y botones que ya tenés...
+
+                if (dataGridView1.Columns.Count > 0)
+                {
+                    dataGridView1.Columns["IdProfesional"].HeaderText = "ID";
+                    dataGridView1.Columns["Nombre"].HeaderText = "First Name";
+                    dataGridView1.Columns["Apellido"].HeaderText = "Last Name";
+                    dataGridView1.Columns["DNI"].HeaderText = "ID Number";
+                    dataGridView1.Columns["Telefono"].HeaderText = "Phone";
+                    dataGridView1.Columns["Email"].HeaderText = "Email";
+                    dataGridView1.Columns["FechaNacimiento"].HeaderText = "Birth Date";
+                    dataGridView1.Columns["Matricula"].HeaderText = "License";
+                    dataGridView1.Columns["IdEspecialidad"].HeaderText = "Specialty";
+                }
             }
         }
     }

@@ -129,6 +129,7 @@
             this.Controls.Add(this.grpUsuarios);
             this.Name = "frmUsuario";
             this.Text = "Gestor | Usuarios";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmUsuario_FormClosed);
             this.Load += new System.EventHandler(this.frmUsuario_Load);
             this.grpUsuarios.ResumeLayout(false);
             this.grpUsuarios.PerformLayout();

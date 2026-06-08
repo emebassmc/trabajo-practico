@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace UI
 {
-    public partial class frmEspecialidad : Form
+    public partial class frmEspecialidad : Form, IObservadorIdioma
     {
         clsEspecialidadBLL bllEspecialidad = new clsEspecialidadBLL();
         bool modoEdicion = false;
@@ -27,6 +27,8 @@ namespace UI
         {
             cargarGrilla();
             bloquearCampos();
+            clsGestorIdioma.GetInstancia().Suscribir(this);
+            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
         }
 
 
@@ -132,6 +134,34 @@ namespace UI
             limpiarCampos();
             bloquearCampos();
             modoEdicion = false;
+        }
+
+        private void frmEspecialidad_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clsGestorIdioma.GetInstancia().Desuscribir(this);
+        }
+        public void ActualizarIdioma(string idioma)
+        {
+            if (idioma == "es")
+            {
+                groupBox1.Text = "Especialidades";
+                lblNombre.Text = "Nombre";
+                btnNuevo.Text = "Nuevo";
+                btnGuardar.Text = "Guardar";
+                btnEliminar.Text = "Eliminar";
+                btnCancelar.Text = "Cancelar";
+                this.Text = "ABM-Especialidad";
+            }
+            else if (idioma == "en")
+            {
+                groupBox1.Text = "Specialties";
+                lblNombre.Text = "Name";
+                btnNuevo.Text = "New";
+                btnGuardar.Text = "Save";
+                btnEliminar.Text = "Delete";
+                btnCancelar.Text = "Cancel";
+                this.Text = "Specialties";
+            }
         }
     }
 }
