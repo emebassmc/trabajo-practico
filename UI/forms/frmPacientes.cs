@@ -218,7 +218,7 @@ namespace UI
 
                 if (dgvPacientes.Columns.Count > 0)
                 {
-                    dgvPacientes.Columns["IdPaciente"].HeaderText = "ID";
+                    dgvPacientes.Columns["IdPersona"].HeaderText = "ID";
                     dgvPacientes.Columns["Nombre"].HeaderText = "Nombre";
                     dgvPacientes.Columns["Apellido"].HeaderText = "Apellido";
                     dgvPacientes.Columns["DNI"].HeaderText = "DNI";
@@ -246,7 +246,7 @@ namespace UI
 
                 if (dgvPacientes.Columns.Count > 0)
                 {
-                    dgvPacientes.Columns["IdPaciente"].HeaderText = "ID";
+                    dgvPacientes.Columns["IdPersona"].HeaderText = "ID";
                     dgvPacientes.Columns["Nombre"].HeaderText = "First Name";
                     dgvPacientes.Columns["Apellido"].HeaderText = "Last Name";
                     dgvPacientes.Columns["DNI"].HeaderText = "ID Number";

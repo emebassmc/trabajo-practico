@@ -36,12 +36,17 @@ namespace BLL
                 if (string.IsNullOrEmpty(especialidad.Nombre)) return false;
 
                 clsEspecialidadDAL dal = new clsEspecialidadDAL();
+                clsEspecialidadBE anterior = dal.GetByID(especialidad.IdEspecialidad);
                 bool resultado = dal.Update(especialidad);
 
                 clsBitacoraBE b = new clsBitacoraBE();
                 b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
                 b.Actividad = "Update Especialidad";
-                b.Informacion = resultado ? "OK - Id: " + especialidad.IdEspecialidad : "ERROR";
+
+                b.Informacion = resultado ?
+                    "ANTES - ID: " + anterior.IdEspecialidad + " Nombre: " + anterior.Nombre +
+                    " | DESPUÉS - ID: " + especialidad.IdEspecialidad + " Nombre: " + especialidad.Nombre
+                    : "ERROR";
                 clsBitacoraBLL.Registrar(b);
                 return resultado;
 
@@ -50,9 +55,7 @@ namespace BLL
             {
                 string error = ex.ToString();
                 return false;
-            }
-
-            
+            }            
         }
         public bool Delete(int id)
         {

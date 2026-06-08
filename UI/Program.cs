@@ -16,6 +16,16 @@ namespace UI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            bool integridadOk = BLL.clsDigitoVerificador.VerificarIntegridad();
+            if (!integridadOk)
+            {
+                MessageBox.Show(
+                    "Se detectaron inconsistencias en la base de datos.\nContacte al administrador.",
+                    "Error de Integridad",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return; // no abre el login
+            }
             Application.Run(new frmLogin());
         }
     }

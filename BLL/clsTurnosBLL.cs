@@ -78,6 +78,35 @@ namespace BLL
                 return false;
             }
         }
+        public bool Update(clsTurnoBE turno)
+        {
+            try
+            {
+                if (turno.IDTurno <= 0) return false;
+                if (turno.IDPaciente <= 0) return false;
+                if (turno.IDProfesional <= 0) return false;
+
+                clsTurnosDAL dal = new clsTurnosDAL();
+                clsTurnoBE anterior = dal.GetById(turno.IDTurno);
+
+                bool resultado = dal.Update(turno);
+
+                clsBitacoraBE b = new clsBitacoraBE();
+                b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
+                b.Actividad = "Update Turno";
+                b.Informacion = resultado ?
+                    "ANTES - ID:" + anterior.IDTurno + " Pac:" + anterior.IDPaciente + " Prof:" + anterior.IDProfesional + " Fecha:" + anterior.FechaHora + " Estado:" + anterior.Estado +
+                    " | DESPUÉS - ID:" + turno.IDTurno + " Pac:" + turno.IDPaciente + " Prof:" + turno.IDProfesional + " Fecha:" + turno.FechaHora + " Estado:" + turno.Estado
+                    : "ERROR";
+                clsBitacoraBLL.Registrar(b);
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                string v = ex.ToString();
+                return false;
+            }
+        }
         #endregion
 
 
@@ -139,14 +168,3 @@ namespace BLL
     }
 }
 
-/*
-
-GetByPaciente(int idPaciente): List<clsTurnoBE>
-  - idPaciente > 0
-  - llamar dal.GetByPaciente()
-
-EstaDisponible(int idProfesional, DateTime fechaHora): bool  ← privado
-  - traer todos los turnos del profesional
-  - verificar que ninguno tenga la misma FechaHora
-  - devolver true si está libre
-*/

@@ -16,6 +16,7 @@ namespace BLL
                 if (paciente.DNI.Length != 8) return false;
 
                 clsPacienteDAL dal = new clsPacienteDAL();
+                paciente.DVH = clsDigitoVerificador.CalcularDVH(paciente); 
                 bool resultado = dal.Insert(paciente);
 
                 clsBitacoraBE b = new clsBitacoraBE();
@@ -40,20 +41,30 @@ namespace BLL
                 if (string.IsNullOrEmpty(pacienteUpdate.Nombre)) return false;
                 if (string.IsNullOrEmpty(pacienteUpdate.Apellido)) return false;
                 if (string.IsNullOrEmpty(pacienteUpdate.DNI) || (pacienteUpdate.DNI.Length != 8)) return false;
+
                 clsPacienteDAL dal = new clsPacienteDAL();
+                clsPacienteBE pacienteAnterior = dal.GetByID(pacienteUpdate.IdPersona); // ← ANTES
+                pacienteUpdate.DVH = clsDigitoVerificador.CalcularDVH(pacienteUpdate);  // ← DVH
                 bool resultado = dal.Update(pacienteUpdate);
+
+                // Recalcular DVV
+                List<clsPacienteBE> todos = dal.GetAll();
+                int dvv = clsDigitoVerificador.CalcularDVV(todos);
+                new clsDigitoVerificadorDAL().GuardarDVV("Paciente", dvv);
 
                 clsBitacoraBE b = new clsBitacoraBE();
                 b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
                 b.Actividad = "Update Paciente";
-                b.Informacion = resultado ? "OK - DNI: " + pacienteUpdate.DNI : "ERROR";
+                b.Informacion = resultado ?
+                    "ANTES: ID:" + pacienteAnterior.IdPersona + " " + pacienteAnterior.Nombre + " " + pacienteAnterior.Apellido + " DNI:" + pacienteAnterior.DNI +
+                    " | DESPUÉS: ID:" + pacienteUpdate.IdPersona + " " + pacienteUpdate.Nombre + " " + pacienteUpdate.Apellido + " DNI:" + pacienteUpdate.DNI
+                    : "ERROR";
                 clsBitacoraBLL.Registrar(b);
 
                 return resultado;
             }
             catch (Exception ex)
             {
-
                 string v = ex.ToString();
                 return false;
             }

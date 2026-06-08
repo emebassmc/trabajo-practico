@@ -23,9 +23,9 @@ namespace DAL
                 try
                 {
                     string sql =
-                        @"INSERT INTO Paciente(Nombre,Apellido,DNI,Telefono,Email,FechaNacimiento,ObraSocial) 
+                        @"INSERT INTO Paciente(Nombre,Apellido,DNI,Telefono,Email,FechaNacimiento,ObraSocial,DVH) 
                         VALUES 
-                        (@Nombre,@Apellido,@DNI,@Telefono,@Email,@FechaNacimiento,@ObraSocial)";
+                        (@Nombre,@Apellido,@DNI,@Telefono,@Email,@FechaNacimiento,@ObraSocial,@DVH)";
                     //ahora ejecutamos el comando que hara que los datos de la clase Paciente de la capa de negocio se "peguen" a las tablas de la DB.
                     SqlCommand cmd = new SqlCommand(sql, con, tran);
                     cmd.Parameters.AddWithValue("@Nombre", paciente.Nombre);
@@ -35,6 +35,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@Email", paciente.Email);
                     cmd.Parameters.AddWithValue("@FechaNacimiento", paciente.FechaNacimiento);
                     cmd.Parameters.AddWithValue("@ObraSocial", paciente.ObraSocial);
+                    cmd.Parameters.AddWithValue("@DVH", paciente.DVH);
 
                     cmd.ExecuteNonQuery();
 
@@ -67,7 +68,8 @@ namespace DAL
                             Telefono = @Telefono,
                             Email = @Email,
                             FechaNacimiento = @FechaNacimiento,
-                            ObraSocial = @ObraSocial
+                            ObraSocial = @ObraSocial,
+                            DVH = @DVH
                             WHERE IdPaciente = @IdPaciente";
                     //mismo sector de code que el INSERT
                     SqlCommand cmd = new SqlCommand(sql, con, tran);
@@ -79,6 +81,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@FechaNacimiento", paciente.FechaNacimiento);
                     cmd.Parameters.AddWithValue("@ObraSocial", paciente.ObraSocial);
                     cmd.Parameters.AddWithValue("@IdPaciente", paciente.IdPersona);
+                    cmd.Parameters.AddWithValue("@DVH", paciente.DVH);
                     cmd.ExecuteNonQuery();
                     tran.Commit();
                     return true;
@@ -181,7 +184,8 @@ namespace DAL
                 Telefono = dr["Telefono"].ToString(),
                 Email = dr["Email"].ToString(),
                 FechaNacimiento = (DateTime)dr["FechaNacimiento"],
-                ObraSocial = dr["ObraSocial"].ToString()
+                ObraSocial = dr["ObraSocial"].ToString(),
+                DVH = (int)dr["DVH"]
             };
         }
 

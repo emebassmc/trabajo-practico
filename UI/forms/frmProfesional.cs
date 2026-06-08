@@ -188,11 +188,9 @@ namespace UI
         {
             if (idioma == "es")
             {
-                // labels y botones que ya tenés...
-
                 if (dataGridView1.Columns.Count > 0)
                 {
-                    dataGridView1.Columns["IdProfesional"].HeaderText = "ID";
+                    dataGridView1.Columns["IdPersona"].HeaderText = "ID";
                     dataGridView1.Columns["Nombre"].HeaderText = "Nombre";
                     dataGridView1.Columns["Apellido"].HeaderText = "Apellido";
                     dataGridView1.Columns["DNI"].HeaderText = "DNI";
@@ -205,11 +203,9 @@ namespace UI
             }
             else if (idioma == "en")
             {
-                // labels y botones que ya tenés...
-
                 if (dataGridView1.Columns.Count > 0)
                 {
-                    dataGridView1.Columns["IdProfesional"].HeaderText = "ID";
+                    dataGridView1.Columns["IdPersona"].HeaderText = "ID";
                     dataGridView1.Columns["Nombre"].HeaderText = "First Name";
                     dataGridView1.Columns["Apellido"].HeaderText = "Last Name";
                     dataGridView1.Columns["DNI"].HeaderText = "ID Number";

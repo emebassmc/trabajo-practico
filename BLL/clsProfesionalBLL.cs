@@ -49,13 +49,19 @@ namespace BLL
                 if (string.IsNullOrEmpty(profesional.Apellido)) return false;
                 if (string.IsNullOrEmpty(profesional.DNI)) return false;
                 if (profesional.DNI.Length != 8) return false;
+
                 clsProfesionalDAL dal = new clsProfesionalDAL();
+                clsProfesionalBE anterior = dal.GetByID(profesional.IdPersona);
+
                 bool resultado = dal.Update(profesional);
 
                 clsBitacoraBE b = new clsBitacoraBE();
                 b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
                 b.Actividad = "Update Profesional";
-                b.Informacion = resultado ? "OK - Id: " + profesional.IdPersona : "ERROR";
+                b.Informacion = resultado ?
+           "OK - ANTES: ID:" + anterior.IdPersona + " " + anterior.Nombre + " " + anterior.Apellido + " DNI:" + anterior.DNI + " Mat:" + anterior.Matricula +
+           " | DESPUÉS: ID:" + profesional.IdPersona + " " + profesional.Nombre + " " + profesional.Apellido + " DNI:" + profesional.DNI + " Mat:" + profesional.Matricula
+           : "ERROR";
                 clsBitacoraBLL.Registrar(b);
                 return resultado;
             }
