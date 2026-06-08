@@ -52,6 +52,21 @@ namespace DAL
             }
             return Usuario;
         }
+        public List<clsUsuarioBE> GetAll()
+        {
+            List<clsUsuarioBE> lista = new List<clsUsuarioBE>();
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Usuario", con);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    lista.Add(Mapear(dr));
+                }
+            }
+            return lista;
+        }
         private clsUsuarioBE Mapear(SqlDataReader dr)
         {
             return new clsUsuarioBE

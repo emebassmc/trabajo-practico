@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -75,6 +76,40 @@ namespace BLL
         {
             if (IdUsuario <= 0) return new List<clsRolBE>();
             return dal.GetRolesPorUsuario(IdUsuario);
+        }
+        private IComponenteRol BuscarEnArbol(IComponenteRol nodo, int idBuscado)
+        {
+            if (nodo == null) return null;
+            if (nodo.IdRol == idBuscado) return nodo;
+
+            if (nodo is csRolGrupo)
+            {
+                foreach (IComponenteRol hijo in ((csRolGrupo)nodo).Hijos)
+                {
+                    IComponenteRol resultado = BuscarEnArbol(hijo, idBuscado);
+                    if (resultado != null) return resultado;
+                }
+            }
+            return null;
+        }
+        public bool TienePermiso(int IdUsuario, string permiso)
+        {
+            List<clsRolBE> roles = GetRolesUsuario(IdUsuario);
+            IComponenteRol arbol = GetArbol();
+            
+            foreach (clsRolBE rol in roles)
+            {
+                IComponenteRol nodo = BuscarEnArbol(arbol,rol.IdRol);
+                if (nodo != null)
+                {
+                    List<string> permisos = nodo.ObtenerPermisos();
+                    if (permisos.Contains(permiso))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

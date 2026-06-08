@@ -55,7 +55,7 @@ namespace UI
 
         private void rolesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmRoles frm = new frmRoles();
+             Form1 frm = new Form1 ();
             frm.MdiParent = this;
             frm.Show();
         }

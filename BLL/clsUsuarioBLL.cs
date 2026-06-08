@@ -67,5 +67,10 @@ namespace BLL
             }
             catch (Exception ex) { string v = ex.ToString(); return null; }
         }
+        public List<clsUsuarioBE> GetAll()
+        {
+            clsUsuarioDAL dal = new clsUsuarioDAL();
+            return dal.GetAll();
+        }
     }
 }

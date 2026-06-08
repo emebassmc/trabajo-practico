@@ -39,21 +39,6 @@ namespace BLL
             }
             return lista;
         }
-        private IComponenteRol BuscarEnArbol(IComponenteRol nodo, int idBuscado)
-        {
-            if (nodo == null) return null;
-            if (nodo.IdRol == idBuscado) return nodo;
-
-            if (nodo is csRolGrupo)
-            {
-                foreach (IComponenteRol hijo in ((csRolGrupo)nodo)._hijos)
-                {
-                    IComponenteRol resultado = BuscarEnArbol(hijo, idBuscado);
-                    if (resultado != null) return resultado;
-                }
-            }
-
-            return null;
-        }
+       
     }
 }
