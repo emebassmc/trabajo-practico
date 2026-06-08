@@ -73,20 +73,6 @@ namespace BLL
 
             return true;
         }
-        public static void RecalcularTodos()
-        {
-            clsPacienteDAL dal = new clsPacienteDAL();
-            List<clsPacienteBE> lista = dal.GetAll();
-
-            foreach (clsPacienteBE p in lista)
-            {
-                p.DVH = CalcularDVH(p);
-                dal.Update(p);
-            }
-
-            int dvv = CalcularDVV(dal.GetAll());
-            new clsDigitoVerificadorDAL().GuardarDVV("Paciente", dvv);
-        }
 
     }
 }

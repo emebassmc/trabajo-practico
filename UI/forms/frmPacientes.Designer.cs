@@ -251,7 +251,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgvPacientes);
             this.Name = "frmPacientes";
-            this.Text = "frmPacientes1";
+            this.Text = "TurnoSync | Pacientes";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmPacientes_FormClosed);
             this.Load += new System.EventHandler(this.frmPacientes_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPacientes)).EndInit();

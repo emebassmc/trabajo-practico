@@ -128,7 +128,7 @@
             this.ClientSize = new System.Drawing.Size(424, 408);
             this.Controls.Add(this.groupBox1);
             this.Name = "frmEspecialidad";
-            this.Text = "ABM-Especialidad";
+            this.Text = "TurnoSync | Especialidades";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmEspecialidad_FormClosed);
             this.Load += new System.EventHandler(this.frmEspecialidad_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

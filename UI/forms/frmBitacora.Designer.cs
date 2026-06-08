@@ -59,7 +59,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
             this.Name = "frmBitacora";
-            this.Text = "frmBitacora";
+            this.Text = "TurnoSync | Bitacora";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmBitacora_FormClosed);
             this.Load += new System.EventHandler(this.frmBitacora_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

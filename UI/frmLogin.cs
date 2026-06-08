@@ -48,6 +48,7 @@ namespace UI
                 clsSesionActual.GetInstancia().NombreUsuario = txtUsuario.Text;
                 frmPrincipal principal = new frmPrincipal();
                 principal.Show();
+                //this.Close();
             }
             else
             {

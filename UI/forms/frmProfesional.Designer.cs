@@ -230,7 +230,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.Profesional);
             this.Name = "frmProfesional";
-            this.Text = "frmProfesional";
+            this.Text = "TurnoSync | Profesionales";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmProfesional_FormClosed);
             this.Load += new System.EventHandler(this.frmProfesional_Load);
             this.Profesional.ResumeLayout(false);

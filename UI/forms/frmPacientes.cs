@@ -37,7 +37,7 @@ namespace UI
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
-        { 
+        {
             if (idSeleccionado <= 0) return;
             string mensaje = clsGestorIdioma.GetInstancia().IdiomaActual == "es"
                 ? "¿Está seguro que desea eliminar?"
@@ -190,6 +190,7 @@ namespace UI
         private void frmPacientes_Load(object sender, EventArgs e)
         {
             cargarGrilla();
+            PersonalizarForm();
             clsGestorIdioma.GetInstancia().Suscribir(this);
             ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual); ;
         }
@@ -256,6 +257,42 @@ namespace UI
                     dgvPacientes.Columns["ObraSocial"].HeaderText = "Health Insurance";
                 }
             }
+        }
+        private void PersonalizarForm()
+        {
+            this.BackColor = Color.FromArgb(245, 245, 245);
+            foreach (Control c in this.Controls)
+                PersonalizarFormRecursivo(c);
+        }
+
+        private void PersonalizarFormRecursivo(Control control)
+        {
+            if (control is System.Windows.Forms.Button btn)
+            {
+                btn.BackColor = Color.FromArgb(45, 62, 80);
+                btn.ForeColor = Color.White;
+                btn.FlatStyle = FlatStyle.Flat;
+                btn.FlatAppearance.BorderSize = 0;
+                btn.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                btn.Cursor = Cursors.Hand;
+            }
+            if (control is GroupBox gb)
+            {
+                gb.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+                gb.ForeColor = Color.FromArgb(45, 62, 80);
+            }
+            if (control is Label lbl)
+            {
+                lbl.Font = new Font("Segoe UI", 9);
+                lbl.ForeColor = Color.FromArgb(50, 50, 50);
+            }
+            if (control is System.Windows.Forms.TextBox txt)
+            {
+                txt.BorderStyle = BorderStyle.FixedSingle;
+                txt.Font = new Font("Segoe UI", 9);
+            }
+            foreach (Control child in control.Controls)
+                PersonalizarFormRecursivo(child);
         }
     }
 }

@@ -182,7 +182,7 @@
             this.ClientSize = new System.Drawing.Size(1101, 550);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
-            this.Text = "frmRoles";
+            this.Text = "TurnoSync | ABM Roles";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Shown += new System.EventHandler(this.Form1_Shown);
