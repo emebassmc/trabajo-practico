@@ -29,15 +29,6 @@ namespace UI.forms
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            cargarGrupos();
-            CargarArbol();
-            CargarTodosLosRoles();
-            CargarRolesParaUsuario();
-            CargarUsuarios(); 
-        }
-
         private void btnCrearGrupo_Click(object sender, EventArgs e)
         {
             try
@@ -70,12 +61,19 @@ namespace UI.forms
         {
             try
             {
-                if (lstGrupos.SelectedItem == null) return; 
-                rol = lstGrupos.SelectedItem as clsRolBE;
-                bll.Delete(rol.IdRol);
-                cargarGrupos();
-                CargarArbol();
-                CargarTodosLosRoles();
+                if (lstGrupos.SelectedItem == null)
+                {
+                    MessageBox.Show("Seleccioná un grupo primero.");
+                    return;
+                }
+                else
+                {
+                    rol = lstGrupos.SelectedItem as clsRolBE;
+                    bll.Delete(rol.IdRol);
+                    cargarGrupos();
+                    CargarArbol();
+                    CargarTodosLosRoles();
+                }
             }
             catch (Exception ex)
             {
@@ -93,7 +91,7 @@ namespace UI.forms
                 {
                     clsRolBE rol = (clsRolBE)item;
                     rol.IdRolPadre = grupo.IdRol;
-                    bll.Insert(rol);
+                    bll.Update(rol);
                 }
                 cargarGrupos();
                 CargarArbol();
@@ -126,6 +124,7 @@ namespace UI.forms
 
             trvRoles.Nodes.Add(nodoRaiz);
             trvRoles.ExpandAll();
+            trvRoles.Refresh();
         }
 
         private void AgregarNodos(TreeNode nodo, csRolGrupo grupo)
@@ -200,6 +199,39 @@ namespace UI.forms
         private void tabPage2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            cargarGrupos();
+            CargarArbol();
+            CargarTodosLosRoles();
+            CargarRolesParaUsuario();
+            CargarUsuarios();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkLstRoles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lstGrupos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstGrupos.SelectedItem == null) return;
+            clsRolBE grupo = lstGrupos.SelectedItem as clsRolBE;
+            List<clsRolBE> todos = bll.GetAll();
+
+            for (int i = 0; i < chkLstRoles.Items.Count; i++)
+            {
+                clsRolBE rol = chkLstRoles.Items[i] as clsRolBE;
+                bool esHijo = rol.IdRolPadre.HasValue && rol.IdRolPadre.Value == grupo.IdRol;
+                chkLstRoles.SetItemChecked(i, esHijo);
+            }
         }
     }
 }

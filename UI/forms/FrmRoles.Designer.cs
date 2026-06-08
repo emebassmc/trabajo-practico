@@ -31,7 +31,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.txtNombre = new System.Windows.Forms.TextBox();
-            this.btnGuardarAsignacion = new System.Windows.Forms.Button();
+            this.btnActualizarAsignacion = new System.Windows.Forms.Button();
             this.btnEliminarGrupo = new System.Windows.Forms.Button();
             this.btnCrearGrupo = new System.Windows.Forms.Button();
             this.chkLstRoles = new System.Windows.Forms.CheckedListBox();
@@ -60,7 +60,7 @@
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.txtNombre);
-            this.tabPage1.Controls.Add(this.btnGuardarAsignacion);
+            this.tabPage1.Controls.Add(this.btnActualizarAsignacion);
             this.tabPage1.Controls.Add(this.btnEliminarGrupo);
             this.tabPage1.Controls.Add(this.btnCrearGrupo);
             this.tabPage1.Controls.Add(this.chkLstRoles);
@@ -81,14 +81,15 @@
             this.txtNombre.Size = new System.Drawing.Size(100, 20);
             this.txtNombre.TabIndex = 13;
             // 
-            // btnGuardarAsignacion
+            // btnActualizarAsignacion
             // 
-            this.btnGuardarAsignacion.Location = new System.Drawing.Point(509, 485);
-            this.btnGuardarAsignacion.Name = "btnGuardarAsignacion";
-            this.btnGuardarAsignacion.Size = new System.Drawing.Size(75, 23);
-            this.btnGuardarAsignacion.TabIndex = 12;
-            this.btnGuardarAsignacion.Text = "Guardar";
-            this.btnGuardarAsignacion.UseVisualStyleBackColor = true;
+            this.btnActualizarAsignacion.Location = new System.Drawing.Point(509, 485);
+            this.btnActualizarAsignacion.Name = "btnActualizarAsignacion";
+            this.btnActualizarAsignacion.Size = new System.Drawing.Size(75, 23);
+            this.btnActualizarAsignacion.TabIndex = 12;
+            this.btnActualizarAsignacion.Text = "Actualizar";
+            this.btnActualizarAsignacion.UseVisualStyleBackColor = true;
+            this.btnActualizarAsignacion.Click += new System.EventHandler(this.btnGuardarAsignacion_Click);
             // 
             // btnEliminarGrupo
             // 
@@ -115,10 +116,10 @@
             this.chkLstRoles.Name = "chkLstRoles";
             this.chkLstRoles.Size = new System.Drawing.Size(334, 499);
             this.chkLstRoles.TabIndex = 9;
+            this.chkLstRoles.SelectedIndexChanged += new System.EventHandler(this.chkLstRoles_SelectedIndexChanged);
             // 
             // trvRoles
             // 
-            this.trvRoles.CheckBoxes = true;
             this.trvRoles.Location = new System.Drawing.Point(326, 12);
             this.trvRoles.Name = "trvRoles";
             this.trvRoles.Size = new System.Drawing.Size(400, 467);
@@ -131,6 +132,7 @@
             this.lstGrupos.Name = "lstGrupos";
             this.lstGrupos.Size = new System.Drawing.Size(316, 498);
             this.lstGrupos.TabIndex = 7;
+            this.lstGrupos.SelectedIndexChanged += new System.EventHandler(this.lstGrupos_SelectedIndexChanged);
             // 
             // tabPage2
             // 
@@ -182,6 +184,7 @@
             this.Name = "Form1";
             this.Text = "frmRoles";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -195,7 +198,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TextBox txtNombre;
-        private System.Windows.Forms.Button btnGuardarAsignacion;
+        private System.Windows.Forms.Button btnActualizarAsignacion;
         private System.Windows.Forms.Button btnEliminarGrupo;
         private System.Windows.Forms.Button btnCrearGrupo;
         private System.Windows.Forms.CheckedListBox chkLstRoles;

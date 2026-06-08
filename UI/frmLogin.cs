@@ -29,7 +29,6 @@ namespace UI
 
         private void button1_Click(object sender, EventArgs e)
         {
-
             if (string.IsNullOrEmpty(txtUsuario.Text) || string.IsNullOrEmpty(txtPassword.Text))
             {
                 label3.Text = "Complete todos los campos";

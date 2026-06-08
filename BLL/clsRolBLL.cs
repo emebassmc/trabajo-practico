@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +34,12 @@ namespace BLL
             if (id <= 0 ) { return false; }
             return dal.Delete(id);
         }
-
+        public bool Update(clsRolBE rol)
+        {
+            if (rol.IdRol <= 0) return false;
+            if (string.IsNullOrEmpty(rol.Nombre)) return false;
+            return dal.Update(rol);
+        }
         public IComponenteRol GetArbol()
         {
             List<clsRolBE> todos = dal.GetAll();
@@ -54,8 +60,11 @@ namespace BLL
                 }
                 else
                 {
-                    csRolGrupo padre = (csRolGrupo)mapa[r.IdRolPadre.Value];
-                    padre.Agregar(mapa[r.IdRol]);
+                    if (mapa.ContainsKey(r.IdRolPadre.Value) && mapa[r.IdRolPadre.Value] is csRolGrupo)
+                    {
+                        csRolGrupo padre = (csRolGrupo)mapa[r.IdRolPadre.Value];
+                        padre.Agregar(mapa[r.IdRol]);
+                    }
                 }
             }
             return raiz;
@@ -96,7 +105,7 @@ namespace BLL
         {
             List<clsRolBE> roles = GetRolesUsuario(IdUsuario);
             IComponenteRol arbol = GetArbol();
-            
+             
             foreach (clsRolBE rol in roles)
             {
                 IComponenteRol nodo = BuscarEnArbol(arbol,rol.IdRol);

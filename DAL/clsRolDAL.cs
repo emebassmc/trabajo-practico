@@ -52,8 +52,39 @@ namespace DAL
             }
         }
 
+        public bool Update(clsRolBE rol)
+        {
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                //abrimos la conexion a la db y luego abrimos la transacción.
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    string sql = @"UPDATE Rol 
+                     SET Nombre = @Nombre, 
+                     EsGrupo = @EsGrupo, 
+                     IdRolPadre = @IdRolPadre 
+                     WHERE IdRol = @IdRol";
 
+                    SqlCommand cmd = new SqlCommand(sql, con, tran);
+                    cmd.Parameters.AddWithValue("@Nombre", rol.Nombre);
+                    cmd.Parameters.AddWithValue("@EsGrupo", rol.EsGrupo);
+                    cmd.Parameters.AddWithValue("@IdRolPadre",
+                        rol.IdRolPadre.HasValue ? (object)rol.IdRolPadre.Value : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IdRol", rol.IdRol);
 
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    return false;
+                }
+            } 
+        }
         public bool Delete(int idrol)
         {
             using (SqlConnection con = clsConexionDAL.GetConnection())

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BLL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,7 @@ namespace UI
 {
     public partial class frmPrincipal : Form
     {
+        clsRolBLL rolBll = new clsRolBLL();
         public frmPrincipal()
         {
             InitializeComponent();
@@ -20,6 +22,12 @@ namespace UI
 
         private void turnosToolStripMenuItem_Click(object sender, EventArgs e)
         {
+           
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionPacientes"))
+            {
+                MessageBox.Show("Sin permisos.");
+                return;
+            }
             frmPacientes frm = new frmPacientes();
             frm.MdiParent = this;
             frm.Show();
@@ -27,6 +35,11 @@ namespace UI
 
         private void aBMToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionTurnos"))
+            {
+                MessageBox.Show("Sin permisos.");
+                return;
+            }
             frmTurnos frm = new frmTurnos();
             frm.MdiParent = this;
             frm.Show();
@@ -34,6 +47,11 @@ namespace UI
 
         private void especialidadesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionEspecialidades"))
+            {
+                MessageBox.Show("Sin permisos.");
+                return;
+            }
             frmEspecialidad frm = new frmEspecialidad();
             frm.MdiParent = this;
             frm.Show();
@@ -41,6 +59,11 @@ namespace UI
 
         private void profesionalesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionProfesionales"))
+            {
+                MessageBox.Show("Sin permisos.");
+                return;
+            }
             frmProfesional frm = new frmProfesional();
             frm.MdiParent = this;
             frm.Show();
@@ -48,6 +71,11 @@ namespace UI
 
         private void bitacoraToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionBitacora"))
+            {
+                MessageBox.Show("Sin permisos.");
+                return;
+            }
             frmBitacora frm = new frmBitacora();
             frm.MdiParent = this;
             frm.Show();
@@ -55,9 +83,39 @@ namespace UI
 
         private void rolesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-             Form1 frm = new Form1 ();
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionRoles"))
+            {
+                MessageBox.Show("Sin permisos.");
+                return;
+            }
+            Form1 frm = new Form1 ();
             frm.MdiParent = this;
             frm.Show();
+        }
+
+        private void frmPrincipal_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void consultasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void salirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void inicioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
