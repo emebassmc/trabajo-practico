@@ -35,6 +35,28 @@ namespace DAL
                 }
             }
         }
+        public bool Delete(int idUsuario)
+        {
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand
+                        ("DELETE FROM Usuario WHERE IdUsuario  = @IdUsuario ", con, tran);
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    return false;
+                }
+            }
+        }
         public clsUsuarioBE GetByUsername(string NombreUsuario)
         {
             clsUsuarioBE Usuario = null;    
@@ -66,6 +88,28 @@ namespace DAL
                 }
             }
             return lista;
+        }
+        public bool QuitarRolesUsuario(int idUsuario)
+        {
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand(
+                        "DELETE FROM UsuarioRol WHERE IdUsuario = @IdUsuario", con, tran);
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    return false;
+                }
+            }
         }
         private clsUsuarioBE Mapear(SqlDataReader dr)
         {

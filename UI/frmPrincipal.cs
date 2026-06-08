@@ -115,7 +115,15 @@ namespace UI
 
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionUsuarios"))
+            {
+                MessageBox.Show("Sin permisos.");
+                return;
+            }
+            frmUsuario frm = new frmUsuario();
+            frm.MdiParent = this;
+            frm.Show();
         }
     }
+     
 }

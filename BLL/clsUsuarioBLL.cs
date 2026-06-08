@@ -58,6 +58,30 @@ namespace BLL
                 return false;
             }
         }
+
+        public bool Eliminar(int id)
+        {           
+                try
+                {
+                    if (id <= 0) return false;
+                    clsUsuarioDAL dal = new clsUsuarioDAL();
+                    dal.QuitarRolesUsuario(id);
+                    bool resultado = dal.Delete(id);
+
+                    clsBitacoraBE b = new clsBitacoraBE();
+                    b.UsuarioId = clsSesionActual.GetInstancia().IdUsuario;
+                    b.Actividad = "Delete Usuario";
+                    b.Informacion = resultado ? "OK - Id: " + id : "ERROR";
+                    clsBitacoraBLL.Registrar(b);
+
+                    return resultado;
+                }
+                catch (Exception ex)
+                {
+                    string v = ex.ToString();
+                    return false;
+                }           
+        }
         public clsUsuarioBE GetByUsername(string nombreUsuario)
         {
             try

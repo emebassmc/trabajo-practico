@@ -31,6 +31,7 @@ namespace UI
             cargarComboProfesionales();
             cargarGrilla();
             bloquearCampos();
+            personalizarGrilla();
         }
 
 
@@ -195,7 +196,33 @@ namespace UI
             btnCancelar.Enabled = true;
             btnConfirmar.Enabled = true;
         }
+        public void personalizarGrilla()
+        {
+            // Estilo general
+            dgvTurnos.EnableHeadersVisualStyles = false;
+            dgvTurnos.BorderStyle = BorderStyle.None;
+            dgvTurnos.GridColor = Color.FromArgb(220, 220, 220);
+            dgvTurnos.BackgroundColor = Color.White;
 
+            // Header
+            dgvTurnos.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(45, 62, 80);
+            dgvTurnos.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvTurnos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            dgvTurnos.ColumnHeadersHeight = 35;
+
+            // Filas
+            dgvTurnos.DefaultCellStyle.BackColor = Color.White;
+            dgvTurnos.DefaultCellStyle.ForeColor = Color.FromArgb(50, 50, 50);
+            dgvTurnos.DefaultCellStyle.Font = new Font("Segoe UI", 9);
+            dgvTurnos.DefaultCellStyle.SelectionBackColor = Color.FromArgb(52, 152, 219);
+            dgvTurnos.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgvTurnos.RowsDefaultCellStyle.BackColor = Color.White;
+            dgvTurnos.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 245, 245);
+            dgvTurnos.RowTemplate.Height = 30;
+
+            // Columnas
+            dgvTurnos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
         public void limpiarCampos()
         {
             txtObservaciones.Text = "";
