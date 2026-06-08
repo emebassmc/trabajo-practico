@@ -51,7 +51,7 @@
             this.grpUsuarios.Controls.Add(this.dgvUsuarios);
             this.grpUsuarios.Location = new System.Drawing.Point(12, 12);
             this.grpUsuarios.Name = "grpUsuarios";
-            this.grpUsuarios.Size = new System.Drawing.Size(803, 231);
+            this.grpUsuarios.Size = new System.Drawing.Size(721, 231);
             this.grpUsuarios.TabIndex = 7;
             this.grpUsuarios.TabStop = false;
             this.grpUsuarios.Text = "Usuarios";
@@ -125,7 +125,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(827, 255);
+            this.ClientSize = new System.Drawing.Size(746, 255);
             this.Controls.Add(this.grpUsuarios);
             this.Name = "frmUsuario";
             this.Text = "Gestor | Usuarios";
