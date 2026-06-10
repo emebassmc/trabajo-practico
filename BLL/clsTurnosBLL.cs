@@ -109,7 +109,7 @@ namespace BLL
         }
         #endregion
 
-
+        #region metodos lectura
         public clsTurnoBE GetByID(int id)
         {
             try
@@ -165,6 +165,7 @@ namespace BLL
             }
             return true;
         }
+        #endregion
     }
 }
 

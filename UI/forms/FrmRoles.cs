@@ -43,7 +43,13 @@ namespace UI.forms
                 clsRolBE rol = new clsRolBE();
                 rol.Nombre = txtNombre.Text;
                 rol.EsGrupo = (resp == DialogResult.Yes);
-                rol.IdRolPadre = null;
+                clsRolBE sistema = bll.GetAll().Find(r => r.Nombre == "Sistema");
+                if (sistema == null)
+                {
+                    MessageBox.Show("No se encontró el rol Sistema en la base de datos.");
+                    return;
+                }
+                rol.IdRolPadre = sistema.IdRol;
 
                 bll.Insert(rol);
                 txtNombre.Text = "";
@@ -59,6 +65,7 @@ namespace UI.forms
 
         private void btnEliminarGrupo_Click(object sender, EventArgs e)
         {
+
             try
             {
                 if (lstGrupos.SelectedItem == null)
@@ -66,18 +73,23 @@ namespace UI.forms
                     MessageBox.Show("Seleccioná un grupo primero.");
                     return;
                 }
-                else
+
+                rol = lstGrupos.SelectedItem as clsRolBE;
+
+                if (rol.Nombre == "Sistema" || rol.Nombre == "Administrador")
                 {
-                    rol = lstGrupos.SelectedItem as clsRolBE;
-                    bll.Delete(rol.IdRol);
-                    cargarGrupos();
-                    CargarArbol();
-                    CargarTodosLosRoles();
+                    MessageBox.Show("No podés eliminar un rol del sistema.");
+                    return;
                 }
+
+                bll.Delete(rol.IdRol);
+                cargarGrupos();
+                CargarArbol();
+                CargarTodosLosRoles();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);   
+                MessageBox.Show("Error: " + ex.Message);
             }
         }
 
@@ -214,7 +226,7 @@ namespace UI.forms
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            trvRoles.Enabled = false;            
         }
 
         private void chkLstRoles_SelectedIndexChanged(object sender, EventArgs e)

@@ -13,6 +13,7 @@ namespace BLL
             {
                 if (string.IsNullOrEmpty(especialidad.Nombre)) return false;
                 clsEspecialidadDAL dal = new clsEspecialidadDAL();
+
                 bool resultado = dal.Insert(especialidad);
 
                 clsBitacoraBE b = new clsBitacoraBE();
@@ -49,7 +50,6 @@ namespace BLL
                     : "ERROR";
                 clsBitacoraBLL.Registrar(b);
                 return resultado;
-
             }
             catch (Exception ex)
             {
@@ -73,7 +73,6 @@ namespace BLL
                 b.Informacion = resultado ? "OK - Id: " + id: "ERROR";
                 clsBitacoraBLL.Registrar(b);
                 return resultado;
-
             }
             catch (Exception ex)
             {
@@ -81,7 +80,6 @@ namespace BLL
                 return false;
             }
         }
-
         public List<clsEspecialidadBE> GetAll()
         {
             try
@@ -91,7 +89,6 @@ namespace BLL
             }
             catch (Exception ex)
             {
-
                 string v = ex.ToString();
                 return null;
             }

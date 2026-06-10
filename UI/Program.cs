@@ -16,6 +16,7 @@ namespace UI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            BLL.clsDigitoVerificador.RecalcularTodos(); // ← descomentar
             bool integridadOk = BLL.clsDigitoVerificador.VerificarIntegridad();
             if (!integridadOk)
             {

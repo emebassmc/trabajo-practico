@@ -11,6 +11,7 @@ namespace BLL
 {
     public class clsProfesionalBLL
     {
+        #region metodos de escritura
         public bool Insert(clsProfesionalBE profesional)
         {
             try
@@ -76,7 +77,6 @@ namespace BLL
         {
             try
             {
-
                 if (id <= 0) return false;
                 clsProfesionalDAL dal = new clsProfesionalDAL();
                 bool resultado = dal.Delete(id);
@@ -94,6 +94,7 @@ namespace BLL
                 return false;
             }
         }
+        #endregion
         #region METODOS DE LECTURA
         public clsProfesionalBE GetById(int id)
         {

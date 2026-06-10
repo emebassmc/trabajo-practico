@@ -82,6 +82,7 @@ namespace BLL
                     return false;
                 }           
         }
+        #region metodos lectura
         public clsUsuarioBE GetByUsername(string nombreUsuario)
         {
             try
@@ -96,5 +97,6 @@ namespace BLL
             clsUsuarioDAL dal = new clsUsuarioDAL();
             return dal.GetAll();
         }
+        #endregion
     }
 }

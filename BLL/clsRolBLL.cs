@@ -13,6 +13,7 @@ namespace BLL
 {
     public class clsRolBLL 
     {
+        #region metodos escritura
         private clsRolDAL dal;
 
         public clsRolBLL()
@@ -81,6 +82,8 @@ namespace BLL
             if (IdRol <= 0) return false;
             return dal.QuitarRolUsuario(IdUsuario, IdRol);
         }
+#endregion
+        #region metodos lectura
         public List<clsRolBE> GetRolesUsuario(int IdUsuario)
         {
             if (IdUsuario <= 0) return new List<clsRolBE>();
@@ -120,5 +123,6 @@ namespace BLL
             }
             return false;
         }
+        #endregion
     }
 }

@@ -78,7 +78,7 @@
             this.Turnos.Controls.Add(this.dtpFechaTurno);
             this.Turnos.Location = new System.Drawing.Point(12, 12);
             this.Turnos.Name = "Turnos";
-            this.Turnos.Size = new System.Drawing.Size(373, 278);
+            this.Turnos.Size = new System.Drawing.Size(776, 241);
             this.Turnos.TabIndex = 3;
             this.Turnos.TabStop = false;
             this.Turnos.Text = "Turnos";
@@ -102,7 +102,7 @@
             // 
             // btnCancelarForm
             // 
-            this.btnCancelarForm.Location = new System.Drawing.Point(177, 227);
+            this.btnCancelarForm.Location = new System.Drawing.Point(169, 206);
             this.btnCancelarForm.Name = "btnCancelarForm";
             this.btnCancelarForm.Size = new System.Drawing.Size(115, 23);
             this.btnCancelarForm.TabIndex = 26;
@@ -148,7 +148,7 @@
             // 
             // btnNuevo
             // 
-            this.btnNuevo.Location = new System.Drawing.Point(6, 198);
+            this.btnNuevo.Location = new System.Drawing.Point(1, 177);
             this.btnNuevo.Name = "btnNuevo";
             this.btnNuevo.Size = new System.Drawing.Size(107, 23);
             this.btnNuevo.TabIndex = 19;
@@ -158,7 +158,7 @@
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(122, 198);
+            this.btnGuardar.Location = new System.Drawing.Point(114, 177);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(107, 23);
             this.btnGuardar.TabIndex = 18;
@@ -168,7 +168,7 @@
             // 
             // btnConfirmar
             // 
-            this.btnConfirmar.Location = new System.Drawing.Point(56, 227);
+            this.btnConfirmar.Location = new System.Drawing.Point(48, 206);
             this.btnConfirmar.Name = "btnConfirmar";
             this.btnConfirmar.Size = new System.Drawing.Size(115, 23);
             this.btnConfirmar.TabIndex = 17;
@@ -196,7 +196,7 @@
             // 
             // btnCancelar
             // 
-            this.btnCancelar.Location = new System.Drawing.Point(235, 198);
+            this.btnCancelar.Location = new System.Drawing.Point(227, 177);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(107, 23);
             this.btnCancelar.TabIndex = 9;
@@ -216,9 +216,9 @@
             // dgvTurnos
             // 
             this.dgvTurnos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTurnos.Location = new System.Drawing.Point(391, 12);
+            this.dgvTurnos.Location = new System.Drawing.Point(10, 259);
             this.dgvTurnos.Name = "dgvTurnos";
-            this.dgvTurnos.Size = new System.Drawing.Size(397, 278);
+            this.dgvTurnos.Size = new System.Drawing.Size(778, 179);
             this.dgvTurnos.TabIndex = 4;
             this.dgvTurnos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTurnos_CellContentClick);
             // 
@@ -230,7 +230,7 @@
             this.Controls.Add(this.dgvTurnos);
             this.Controls.Add(this.Turnos);
             this.Name = "frmTurnos";
-            this.Text = "frmTurnos";
+            this.Text = "TurnoSync | Turnos";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmTurnos_FormClosed);
             this.Load += new System.EventHandler(this.frmTurnos_Load);
             this.Turnos.ResumeLayout(false);

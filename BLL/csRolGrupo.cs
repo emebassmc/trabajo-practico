@@ -8,6 +8,7 @@ namespace BLL
 {
     public class csRolGrupo : IComponenteRol
     {
+        #region metodos de escritura
         public int IdRol {  get; set; }
         public string Nombre {  get; set; }
         public bool EsGrupo => true;
@@ -28,7 +29,8 @@ namespace BLL
         {
             _hijos.Remove(componente);
         }
-
+        #endregion
+        #region metodos lectura
         public List<string> ObtenerPermisos()
         {
             List<string> lista = new List<string>();
@@ -39,6 +41,7 @@ namespace BLL
             }
             return lista;
         }
-       
+        #endregion
+
     }
 }

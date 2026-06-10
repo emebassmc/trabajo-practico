@@ -6,6 +6,7 @@ namespace BLL
 {
     public class clsPacienteBLL
     {
+        #region metodos de escritura
         public bool Insert(clsPacienteBE paciente)
         {
             try
@@ -91,9 +92,9 @@ namespace BLL
                 return false;
             }
         }
+        #endregion
 
         #region metodos de lectura
-
         public clsPacienteBE GetById(int id)
         {
             try
@@ -136,7 +137,6 @@ namespace BLL
                 return null;
             }
         }
-
 
         #endregion
     }

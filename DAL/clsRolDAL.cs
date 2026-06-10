@@ -93,10 +93,24 @@ namespace DAL
                 SqlTransaction tran = con.BeginTransaction();
                 try
                 {
-                    SqlCommand cmd = new SqlCommand
-                        ("DELETE FROM Rol WHERE IdRol = @IdRol", con, tran);
+                    // 1. Borrar asignaciones de usuarios al rol
+                    SqlCommand cmdUR = new SqlCommand(
+                        "DELETE FROM UsuarioRol WHERE IdRol = @IdRol", con, tran);
+                    cmdUR.Parameters.AddWithValue("@IdRol", idrol);
+                    cmdUR.ExecuteNonQuery();
+
+                    // 2. Borrar hijos del rol (poner IdRolPadre en null)
+                    SqlCommand cmdHijos = new SqlCommand(
+                        "UPDATE Rol SET IdRolPadre = NULL WHERE IdRolPadre = @IdRol", con, tran);
+                    cmdHijos.Parameters.AddWithValue("@IdRol", idrol);
+                    cmdHijos.ExecuteNonQuery();
+
+                    // 3. Borrar el rol
+                    SqlCommand cmd = new SqlCommand(
+                        "DELETE FROM Rol WHERE IdRol = @IdRol", con, tran);
                     cmd.Parameters.AddWithValue("@IdRol", idrol);
                     cmd.ExecuteNonQuery();
+
                     tran.Commit();
                     return true;
                 }

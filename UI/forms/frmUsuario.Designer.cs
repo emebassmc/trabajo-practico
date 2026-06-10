@@ -128,7 +128,7 @@
             this.ClientSize = new System.Drawing.Size(746, 255);
             this.Controls.Add(this.grpUsuarios);
             this.Name = "frmUsuario";
-            this.Text = "Gestor | Usuarios";
+            this.Text = "TurnoSync | Usuarios";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmUsuario_FormClosed);
             this.Load += new System.EventHandler(this.frmUsuario_Load);
             this.grpUsuarios.ResumeLayout(false);

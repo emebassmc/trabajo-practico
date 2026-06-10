@@ -25,7 +25,6 @@ namespace BLL
                 paciente.FechaNacimiento.ToString("yyyyMMdd"),
                 paciente.ObraSocial ?? ""
             };
-
             int posAtributo = 1;
             foreach (string valor in valores)
             {
@@ -37,7 +36,6 @@ namespace BLL
                 }
                 posAtributo++;
             }
-
             return suma % 97;
         }
         
@@ -54,16 +52,14 @@ namespace BLL
         {
             clsPacienteDAL dal = new clsPacienteDAL();
             List<clsPacienteBE> lista = dal.GetAll();
-
-            // Verificar DVH de cada paciente
+            // Verificamos el Digito Verificador Horizontal de cada paciente
             foreach (clsPacienteBE paciente in lista)
             {
                 int dvhCalculado = CalcularDVH(paciente);
                 if (dvhCalculado != paciente.DVH)
                     return false;
             }
-
-            // Verificar DVV
+            // Verificamos si el Digito Verificador Vertical tiene integridad
             clsDigitoVerificadorDAL dvDal = new clsDigitoVerificadorDAL();
             int dvvGuardado = dvDal.GetDVV("Paciente");
             int dvvCalculado = CalcularDVV(lista);
@@ -72,6 +68,20 @@ namespace BLL
                 return false;
 
             return true;
+        }
+        public static void RecalcularTodos()
+        {
+            clsPacienteDAL dal = new clsPacienteDAL();
+            List<clsPacienteBE> lista = dal.GetAll();
+
+            foreach (clsPacienteBE p in lista)
+            {
+                p.DVH = CalcularDVH(p);
+                dal.Update(p);
+            }
+
+            int dvv = CalcularDVV(dal.GetAll());
+            new clsDigitoVerificadorDAL().GuardarDVV("Paciente", dvv);
         }
 
     }

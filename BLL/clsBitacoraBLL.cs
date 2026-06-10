@@ -16,7 +16,6 @@ namespace BLL
             bitacora.Fecha = DateTime.Now;
             dal.Insert(bitacora);
         }
-
         public List<clsBitacoraBE> GetAll()
         {
             clsBitacoraDAL dal = new clsBitacoraDAL();
