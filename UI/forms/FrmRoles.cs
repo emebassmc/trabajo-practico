@@ -76,16 +76,32 @@ namespace UI.forms
 
                 rol = lstGrupos.SelectedItem as clsRolBE;
 
-                if (rol.Nombre == "Sistema" || rol.Nombre == "Administrador")
+                if (rol.Nombre == "Sistema" || rol.Nombre == "Administrador" ||
+                    rol.Nombre == "Recepcionista" || rol.Nombre == "Medico")
                 {
                     MessageBox.Show("No podés eliminar un rol del sistema.");
                     return;
                 }
 
-                bll.Delete(rol.IdRol);
-                cargarGrupos();
-                CargarArbol();
-                CargarTodosLosRoles();
+                List<clsRolBE> hijos = bll.GetAll().FindAll(r => r.IdRolPadre == rol.IdRol);
+                string msgHijos = hijos.Count > 0
+                    ? "\nEste rol tiene " + hijos.Count + " permisos hijos que quedarán sin padre:\n" +
+                      string.Join(", ", hijos.Select(h => h.Nombre))
+                    : "";
+
+                DialogResult confirm = MessageBox.Show(
+                    "¿Eliminás el rol '" + rol.Nombre + "'?" + msgHijos,
+                    "Confirmar eliminación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (confirm == DialogResult.Yes)
+                {
+                    bll.Delete(rol.IdRol);
+                    cargarGrupos();
+                    CargarArbol();
+                    CargarTodosLosRoles();
+                }
             }
             catch (Exception ex)
             {
@@ -97,14 +113,30 @@ namespace UI.forms
         {
             try
             {
-                if (lstGrupos.SelectedItem == null) return;
-                clsRolBE grupo = lstGrupos.SelectedItem as clsRolBE;
-                foreach (object item in chkLstRoles.CheckedItems)
+                if (lstGrupos.SelectedItem == null)
                 {
-                    clsRolBE rol = (clsRolBE)item;
-                    rol.IdRolPadre = grupo.IdRol;
-                    bll.Update(rol);
+                    MessageBox.Show("Seleccioná un grupo primero.");
+                    return;
                 }
+
+                clsRolBE grupo = lstGrupos.SelectedItem as clsRolBE;
+
+                if (grupo.Nombre == "Sistema")
+                {
+                    MessageBox.Show("No podés asignar permisos directamente a Sistema.");
+                    return;
+                }
+
+                // Recorrer TODOS los items del checklist
+                for (int i = 0; i < chkLstRoles.Items.Count; i++)
+                {
+                    clsRolBE permiso = chkLstRoles.Items[i] as clsRolBE;
+                    if (chkLstRoles.GetItemChecked(i))
+                        bll.AsignarPermiso(grupo.IdRol, permiso.IdRol);
+                    else
+                        bll.QuitarPermiso(grupo.IdRol, permiso.IdRol);
+                }
+
                 cargarGrupos();
                 CargarArbol();
                 CargarTodosLosRoles();
@@ -116,9 +148,9 @@ namespace UI.forms
         }
         private void cargarGrupos()
         {
-            List<clsRolBE> todos = bll.GetAll(); // ← faltaba esta línea
+            List<clsRolBE> todos = bll.GetAll();
             lstGrupos.DataSource = null;
-            lstGrupos.DataSource = todos.Where(r => r.EsGrupo).ToList(); // ← solo una vez
+            lstGrupos.DataSource = todos.Where(r => r.EsGrupo && r.Nombre != "Sistema").ToList();
             lstGrupos.DisplayMember = "Nombre";
             lstGrupos.ValueMember = "IdRol";
         }
@@ -156,7 +188,7 @@ namespace UI.forms
         {
             chkLstRoles.Items.Clear();
             chkLstRoles.DisplayMember = "Nombre";
-            List<clsRolBE> lista = bll.GetAll();
+            List<clsRolBE> lista = bll.GetAll().Where(r => !r.EsGrupo).ToList(); 
             foreach (clsRolBE rol in lista)
             {
                 chkLstRoles.Items.Add(rol);
@@ -238,13 +270,14 @@ namespace UI.forms
         {
             if (lstGrupos.SelectedItem == null) return;
             clsRolBE grupo = lstGrupos.SelectedItem as clsRolBE;
-            List<clsRolBE> todos = bll.GetAll();
+
+            List<clsRolBE> permisosAsignados = bll.GetPermisosPorRol(grupo.IdRol);
 
             for (int i = 0; i < chkLstRoles.Items.Count; i++)
             {
                 clsRolBE rol = chkLstRoles.Items[i] as clsRolBE;
-                bool esHijo = rol.IdRolPadre.HasValue && rol.IdRolPadre.Value == grupo.IdRol;
-                chkLstRoles.SetItemChecked(i, esHijo);
+                bool estaAsignado = permisosAsignados.Any(p => p.IdRol == rol.IdRol);
+                chkLstRoles.SetItemChecked(i, estaAsignado);
             }
         }
 

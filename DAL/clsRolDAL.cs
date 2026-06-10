@@ -205,11 +205,67 @@ namespace DAL
             }
             return lista;
         }
+        public List<clsRolBE> GetPermisosPorRol(int idRol)
+        {
+            List<clsRolBE> lista = new List<clsRolBE>();
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand(
+                    @"SELECT r.* FROM Rol r
+              INNER JOIN RolPermiso rp ON r.IdRol = rp.IdPermiso
+              WHERE rp.IdRol = @IdRol", con);
+                cmd.Parameters.AddWithValue("@IdRol", idRol);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                    lista.Add(Mapear(dr));
+            }
+            return lista;
+        }
+
+        public bool AsignarPermiso(int idRol, int idPermiso)
+        {
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand(
+                        "INSERT INTO RolPermiso (IdRol, IdPermiso) VALUES (@IdRol, @IdPermiso)", con, tran);
+                    cmd.Parameters.AddWithValue("@IdRol", idRol);
+                    cmd.Parameters.AddWithValue("@IdPermiso", idPermiso);
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+                }
+                catch { tran.Rollback(); return false; }
+            }
+        }
+        //AGREGAMOS METODOS PARA QUE UN GRUPO TENGA LOS MISMOS ROLES QUE OTRO GRUPO
+        public bool QuitarPermiso(int idRol, int idPermiso)
+        {
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand(
+                        "DELETE FROM RolPermiso WHERE IdRol = @IdRol AND IdPermiso = @IdPermiso", con, tran);
+                    cmd.Parameters.AddWithValue("@IdRol", idRol);
+                    cmd.Parameters.AddWithValue("@IdPermiso", idPermiso);
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+                }
+                catch { tran.Rollback(); return false; }
+            }
+        }
         private clsRolBE Mapear(SqlDataReader dr)
         {
             return new clsRolBE
             {
-                // El nombre entre [] tiene que coincidir EXACTO con la columna en SQL
                 IdRol = (int)dr["IdRol"],
                 Nombre = dr["Nombre"].ToString(),
                 IdRolPadre = dr["IdRolPadre"] == DBNull.Value ? (int?)null : (int)dr["IdRolPadre"],

@@ -2,6 +2,7 @@
 using DAL;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
@@ -41,33 +42,43 @@ namespace BLL
             if (string.IsNullOrEmpty(rol.Nombre)) return false;
             return dal.Update(rol);
         }
+
         public IComponenteRol GetArbol()
         {
             List<clsRolBE> todos = dal.GetAll();
-            Dictionary<int, IComponenteRol> mapa= new Dictionary<int, IComponenteRol>();
+            Dictionary<int, IComponenteRol> mapa = new Dictionary<int, IComponenteRol>();
+
             foreach (clsRolBE r in todos)
             {
                 if (r.EsGrupo)
                     mapa[r.IdRol] = new csRolGrupo { IdRol = r.IdRol, Nombre = r.Nombre };
-                else
-                    mapa[r.IdRol] = new csRolSimple { IdRol = r.IdRol, Nombre = r.Nombre };
             }
+
+
             IComponenteRol raiz = null;
             foreach (clsRolBE r in todos)
             {
+                if (!r.EsGrupo) continue;
                 if (r.IdRolPadre == null)
-                {
                     raiz = mapa[r.IdRol];
-                }
-                else
+                else if (mapa.ContainsKey(r.IdRolPadre.Value) && mapa[r.IdRolPadre.Value] is csRolGrupo)
                 {
-                    if (mapa.ContainsKey(r.IdRolPadre.Value) && mapa[r.IdRolPadre.Value] is csRolGrupo)
-                    {
-                        csRolGrupo padre = (csRolGrupo)mapa[r.IdRolPadre.Value];
-                        padre.Agregar(mapa[r.IdRol]);
-                    }
+                    csRolGrupo padre = (csRolGrupo)mapa[r.IdRolPadre.Value];
+                    padre.Agregar(mapa[r.IdRol]);
                 }
             }
+
+            foreach (clsRolBE r in todos)
+            {
+                if (!r.EsGrupo) continue;
+                List<clsRolBE> permisos = dal.GetPermisosPorRol(r.IdRol);
+                foreach (clsRolBE permiso in permisos)
+                {
+                    csRolSimple simple = new csRolSimple { IdRol = permiso.IdRol, Nombre = permiso.Nombre };
+                    ((csRolGrupo)mapa[r.IdRol]).Agregar(simple);
+                }
+            }
+
             return raiz;
         }
         public bool AsignarARol(int IdUsuario, int IdRol)
@@ -122,6 +133,19 @@ namespace BLL
                 }
             }
             return false;
+        }
+        public List<clsRolBE> GetPermisosPorRol(int idRol)
+        {
+            return dal.GetPermisosPorRol(idRol);
+        }
+        public bool AsignarPermiso(int idRol, int idPermiso)
+        {
+            return dal.AsignarPermiso(idRol, idPermiso);
+        }
+
+        public bool QuitarPermiso(int idRol, int idPermiso)
+        {
+            return dal.QuitarPermiso(idRol, idPermiso);
         }
         #endregion
     }
