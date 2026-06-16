@@ -22,8 +22,8 @@ namespace UI
 
         private void turnosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
-            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionPacientes"))
+
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Pacientes.Ver"))
             {
                 MessageBox.Show("Sin permisos.");
                 return;
@@ -35,7 +35,7 @@ namespace UI
 
         private void aBMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionTurnos"))
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Turnos.Ver"))
             {
                 MessageBox.Show("Sin permisos.");
                 return;
@@ -47,7 +47,7 @@ namespace UI
 
         private void especialidadesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionEspecialidades"))
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Especialidades.Ver"))
             {
                 MessageBox.Show("Sin permisos.");
                 return;
@@ -59,7 +59,7 @@ namespace UI
 
         private void profesionalesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionProfesionales"))
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Profesionales.Ver"))
             {
                 MessageBox.Show("Sin permisos.");
                 return;
@@ -71,7 +71,7 @@ namespace UI
 
         private void bitacoraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionBitacora"))
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Bitacora.Ver"))
             {
                 MessageBox.Show("Sin permisos.");
                 return;
@@ -83,7 +83,7 @@ namespace UI
 
         private void rolesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionRoles"))
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Roles.Ver"))
             {
                 MessageBox.Show("Sin permisos.");
                 return;
@@ -116,7 +116,7 @@ namespace UI
 
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "GestionUsuarios"))
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Usuarios.VerBioe"))
             {
                 MessageBox.Show("Sin permisos.");
                 return;

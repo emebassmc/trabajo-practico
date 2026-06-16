@@ -8,16 +8,18 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    public class csRolSimple : IComponenteRol
+    public class csRolSimple : clsComponenteRol
     {
-        public int IdRol { get; set; }
-        public string Nombre { get; set; }
-        public bool EsGrupo => false; 
-        List<string> IComponenteRol.ObtenerPermisos()
+        public override bool EsGrupo
         {
-            List<string> list = new List<string>();
-            list.Add(Nombre);
-            return list;
+            get { return false; }
+        }
+
+        public override List<string> ObtenerPermisos()
+        {
+            List<string> lista = new List<string>();
+            lista.Add(Nombre);
+            return lista;
         }
     }
 }

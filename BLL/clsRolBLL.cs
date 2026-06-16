@@ -43,44 +43,9 @@ namespace BLL
             return dal.Update(rol);
         }
 
-        public IComponenteRol GetArbol()
-        {
-            List<clsRolBE> todos = dal.GetAll();
-            Dictionary<int, IComponenteRol> mapa = new Dictionary<int, IComponenteRol>();
-
-            foreach (clsRolBE r in todos)
-            {
-                if (r.EsGrupo)
-                    mapa[r.IdRol] = new csRolGrupo { IdRol = r.IdRol, Nombre = r.Nombre };
-            }
+        
 
 
-            IComponenteRol raiz = null;
-            foreach (clsRolBE r in todos)
-            {
-                if (!r.EsGrupo) continue;
-                if (r.IdRolPadre == null)
-                    raiz = mapa[r.IdRol];
-                else if (mapa.ContainsKey(r.IdRolPadre.Value) && mapa[r.IdRolPadre.Value] is csRolGrupo)
-                {
-                    csRolGrupo padre = (csRolGrupo)mapa[r.IdRolPadre.Value];
-                    padre.Agregar(mapa[r.IdRol]);
-                }
-            }
-
-            foreach (clsRolBE r in todos)
-            {
-                if (!r.EsGrupo) continue;
-                List<clsRolBE> permisos = dal.GetPermisosPorRol(r.IdRol);
-                foreach (clsRolBE permiso in permisos)
-                {
-                    csRolSimple simple = new csRolSimple { IdRol = permiso.IdRol, Nombre = permiso.Nombre };
-                    ((csRolGrupo)mapa[r.IdRol]).Agregar(simple);
-                }
-            }
-
-            return raiz;
-        }
         public bool AsignarARol(int IdUsuario, int IdRol)
         {
             if (IdUsuario <= 0) return false;
@@ -100,29 +65,71 @@ namespace BLL
             if (IdUsuario <= 0) return new List<clsRolBE>();
             return dal.GetRolesPorUsuario(IdUsuario);
         }
-        private IComponenteRol BuscarEnArbol(IComponenteRol nodo, int idBuscado)
+        private clsComponenteRol BuscarEnArbol(clsComponenteRol nodo, int idBuscado)
         {
             if (nodo == null) return null;
             if (nodo.IdRol == idBuscado) return nodo;
 
             if (nodo is csRolGrupo)
             {
-                foreach (IComponenteRol hijo in ((csRolGrupo)nodo).Hijos)
+                foreach (clsComponenteRol hijo in ((csRolGrupo)nodo).Hijos)
                 {
-                    IComponenteRol resultado = BuscarEnArbol(hijo, idBuscado);
+                    clsComponenteRol resultado = BuscarEnArbol(hijo, idBuscado);
                     if (resultado != null) return resultado;
                 }
             }
             return null;
         }
+        public clsComponenteRol GetArbol()
+        {
+            List<clsRolBE> todos = dal.GetAll();
+            Dictionary<int, clsComponenteRol> mapa = new Dictionary<int, clsComponenteRol>();
+
+            // PASO 1: crear un nodo por CADA rol (grupos Y simples)
+            foreach (clsRolBE r in todos)
+            {
+                if (r.EsGrupo)
+                    mapa[r.IdRol] = new csRolGrupo { IdRol = r.IdRol, Nombre = r.Nombre };
+                else
+                    mapa[r.IdRol] = new csRolSimple { IdRol = r.IdRol, Nombre = r.Nombre };
+            }
+
+            // PASO 2: componer la jerarquía completa via RolPermiso
+            foreach (clsRolBE r in todos)
+            {
+                if (!r.EsGrupo) continue;
+
+                csRolGrupo grupoActual = (csRolGrupo)mapa[r.IdRol];
+                List<clsRolBE> hijos = dal.GetPermisosPorRol(r.IdRol);
+
+                foreach (clsRolBE hijo in hijos)
+                {
+                    if (mapa.ContainsKey(hijo.IdRol))
+                        grupoActual.Agregar(mapa[hijo.IdRol]);
+                }
+            }
+
+            // PASO 3: la raíz es Sistema
+            clsComponenteRol raiz = null;
+            foreach (clsRolBE r in todos)
+            {
+                if (r.Nombre == "Sistema")
+                {
+                    raiz = mapa[r.IdRol];
+                    break;
+                }
+            }
+
+            return raiz;
+        }
         public bool TienePermiso(int IdUsuario, string permiso)
         {
             List<clsRolBE> roles = GetRolesUsuario(IdUsuario);
-            IComponenteRol arbol = GetArbol();
+            clsComponenteRol arbol = GetArbol();
              
             foreach (clsRolBE rol in roles)
             {
-                IComponenteRol nodo = BuscarEnArbol(arbol,rol.IdRol);
+                clsComponenteRol nodo = BuscarEnArbol(arbol,rol.IdRol);
                 if (nodo != null)
                 {
                     List<string> permisos = nodo.ObtenerPermisos();

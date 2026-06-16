@@ -15,6 +15,8 @@ namespace UI
     public partial class frmProfesional : Form, IObservadorIdioma
     {
         clsProfesionalBLL bllprofesional = new clsProfesionalBLL();
+        clsRolBLL bllRol = new clsRolBLL();
+        bool puedeAgregar, puedeModificar, puedeEliminar;
         bool modoEdicion = false;
         int idSeleccionado = 0;
 
@@ -25,6 +27,11 @@ namespace UI
 
         private void frmProfesional_Load(object sender, EventArgs e)
         {
+            int idUsuario = clsSesionActual.GetInstancia().IdUsuario;
+            puedeAgregar = bllRol.TienePermiso(idUsuario, "Profesionales.Agregar");
+            puedeModificar = bllRol.TienePermiso(idUsuario, "Profesionales.Modificar");
+            puedeEliminar = bllRol.TienePermiso(idUsuario, "Profesionales.Eliminar");
+
             cargarCombo();
             cargarGrilla();
             bloquearCampos();
@@ -176,7 +183,8 @@ namespace UI
                 dtpFechaNacimiento.Value = Convert.ToDateTime(fila.Cells["FechaNacimiento"].Value);
                 modoEdicion = true;
                 habilitarCampos();
-                btnEliminar.Enabled = true;
+                btnGuardar.Enabled = puedeModificar;   
+                btnEliminar.Enabled = puedeEliminar;   
             }
         }
 

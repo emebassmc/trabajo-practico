@@ -17,17 +17,15 @@ namespace UI
     {
 
         clsPacienteBLL bllPaciente = new clsPacienteBLL();
+        clsRolBLL bllRol = new clsRolBLL();
+        bool puedeAgregar, puedeModificar, puedeEliminar;
         bool modoEdicion = false;
         int idSeleccionado = 0;
 
         public frmPacientes()
         {
             InitializeComponent();
-            cargarGrilla();
-            bloquearCampos();
         }
-
-
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
@@ -70,7 +68,7 @@ namespace UI
             txtMail.Enabled = false;
             txtObraSocial.Enabled = false;
             dtpFechaNacimiento.Enabled = false;
-            btnNuevo.Enabled = true;
+            btnNuevo.Enabled = puedeAgregar;
             btnGuardar.Enabled = false;
             btnEliminar.Enabled = false;
             btnCancelar.Enabled = false;
@@ -175,7 +173,8 @@ namespace UI
                 dtpFechaNacimiento.Value = Convert.ToDateTime(fila.Cells["FechaNacimiento"].Value);
                 modoEdicion = true;
                 habilitarCampos();
-                btnEliminar.Enabled = true;
+                btnGuardar.Enabled = puedeModificar;
+                btnEliminar.Enabled = puedeEliminar;
             }
         }
 
@@ -189,10 +188,16 @@ namespace UI
 
         private void frmPacientes_Load(object sender, EventArgs e)
         {
+            int idUsuario = clsSesionActual.GetInstancia().IdUsuario;
+            puedeAgregar = bllRol.TienePermiso(idUsuario, "Pacientes.Agregar");
+            puedeModificar = bllRol.TienePermiso(idUsuario, "Pacientes.Modificar");
+            puedeEliminar = bllRol.TienePermiso(idUsuario, "Pacientes.Eliminar");
+
             cargarGrilla();
+            bloquearCampos();
             PersonalizarForm();
             clsGestorIdioma.GetInstancia().Suscribir(this);
-            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual); ;
+            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
         }
 
         private void frmPacientes_FormClosed(object sender, FormClosedEventArgs e)

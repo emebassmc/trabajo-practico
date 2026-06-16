@@ -3,45 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace BLL
 {
-    public class csRolGrupo : IComponenteRol
+    public class csRolGrupo : clsComponenteRol
     {
         #region metodos de escritura
-        public int IdRol {  get; set; }
-        public string Nombre {  get; set; }
-        public bool EsGrupo => true;
-        private List<IComponenteRol> _hijos;
-        public List<IComponenteRol> Hijos => _hijos;
+        // IdRol y Nombre se heredan de clsComponenteRol
 
+        public override bool EsGrupo => true;
+
+        private List<clsComponenteRol> _hijos;
+        public List<clsComponenteRol> Hijos => _hijos;
 
         public csRolGrupo()
         {
-            _hijos = new List<IComponenteRol>();
+            _hijos = new List<clsComponenteRol>();
         }
 
-        public void Agregar(IComponenteRol componente)
+        public void Agregar(clsComponenteRol componente)
         {
             _hijos.Add(componente);
         }
-        public  void Quitar(IComponenteRol componente)
+
+        public void Quitar(clsComponenteRol componente)
         {
             _hijos.Remove(componente);
         }
         #endregion
+
         #region metodos lectura
-        public List<string> ObtenerPermisos()
+        public override List<string> ObtenerPermisos()
         {
             List<string> lista = new List<string>();
-
-            foreach (IComponenteRol hijo in _hijos)
+            foreach (clsComponenteRol hijo in _hijos)
             {
                 lista.AddRange(hijo.ObtenerPermisos());
             }
             return lista;
         }
         #endregion
-
     }
 }
