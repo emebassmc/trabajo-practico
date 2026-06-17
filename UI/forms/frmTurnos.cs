@@ -17,6 +17,8 @@ namespace UI
         clsTurnosBLL bllTurnos = new clsTurnosBLL();
         clsPacienteBLL bllPaciente = new clsPacienteBLL();
         clsProfesionalBLL bllProfesional = new clsProfesionalBLL();
+        clsRolBLL bllRol = new clsRolBLL();
+        bool puedeAgregar, puedeConfirmar, puedeCancelar;
         bool modoEdicion = false;
         int idSeleccionado = 0;
         public frmTurnos()
@@ -26,6 +28,11 @@ namespace UI
 
         private void frmTurnos_Load(object sender, EventArgs e)
         {
+            int idUsuario = clsSesionActual.GetInstancia().IdUsuario;
+            puedeAgregar = bllRol.TienePermiso(idUsuario, "Turnos.Agregar");
+            puedeConfirmar = bllRol.TienePermiso(idUsuario, "Turnos.Confirmar");
+            puedeCancelar = bllRol.TienePermiso(idUsuario, "Turnos.Cancelar");
+
             cargarComboEstado();
             cargarComboPacientes();
             cargarComboProfesionales();
@@ -98,8 +105,13 @@ namespace UI
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             if (idSeleccionado <= 0) return;
-            DialogResult confirm = MessageBox.Show("¿Está seguro que desea eliminar?",
-                "Confirmar", MessageBoxButtons.YesNo);
+
+            var g = clsGestorIdioma.GetInstancia();
+            DialogResult confirm = MessageBox.Show(
+                g.Traducir("msgConfirmarEliminar"),
+                g.Traducir("msgConfirmar"),
+                MessageBoxButtons.YesNo);
+
             if (confirm == DialogResult.Yes)
             {
                 bllTurnos.Cancelar(idSeleccionado);
@@ -146,6 +158,8 @@ namespace UI
                 txtObservaciones.Text = fila.Cells["Observaciones"].Value.ToString();
                 modoEdicion = true;
                 habilitarCampos();
+                btnConfirmar.Enabled = puedeConfirmar;
+                btnCancelar.Enabled = puedeCancelar;
             }
         }
 
@@ -181,7 +195,7 @@ namespace UI
             cmbEstado.Enabled = false;
             dtpFechaTurno.Enabled = false;
             txtObservaciones.Enabled = false;
-            btnNuevo.Enabled = true;
+            btnNuevo.Enabled = puedeAgregar;
             btnGuardar.Enabled = false;
             btnCancelar.Enabled = false;
             btnConfirmar.Enabled = false;
@@ -194,9 +208,9 @@ namespace UI
             dtpFechaTurno.Enabled = true;
             txtObservaciones.Enabled = true;
             btnNuevo.Enabled = false;
-            btnGuardar.Enabled = true;
-            btnCancelar.Enabled = true;
-            btnConfirmar.Enabled = true;
+            btnGuardar.Enabled = puedeAgregar;     
+            btnCancelar.Enabled = puedeCancelar;   
+            btnConfirmar.Enabled = puedeConfirmar; 
         }
         public void personalizarGrilla()
         {
@@ -241,53 +255,28 @@ namespace UI
         }
         public void ActualizarIdioma(string idioma)
         {
-            if (idioma == "es")
-            {
-                Turnos.Text = "Turnos";
-                label1.Text = "Paciente";
-                lblNombreProfesional.Text = "Profesional";
-                label7.Text = "Fecha de turno";
-                label2.Text = "Observaciones";
-                btnNuevo.Text = "Nuevo";
-                btnGuardar.Text = "Guardar";
-                btnConfirmar.Text = "Confirmar";
-                btnCancelar.Text = "Cancelar";
-                btnCancelarForm.Text = "Cancelar Form";
-                this.Text = "Turnos";
+            var g = clsGestorIdioma.GetInstancia();
 
-                if (dgvTurnos.Columns.Count > 0)
-                {
-                    dgvTurnos.Columns["IDTurno"].HeaderText = "ID";
-                    dgvTurnos.Columns["IDPaciente"].HeaderText = "Paciente";
-                    dgvTurnos.Columns["IDProfesional"].HeaderText = "Profesional";
-                    dgvTurnos.Columns["FechaHora"].HeaderText = "Fecha y Hora";
-                    dgvTurnos.Columns["Estado"].HeaderText = "Estado";
-                    dgvTurnos.Columns["Observaciones"].HeaderText = "Observaciones";
-                }
-            }
-            else if (idioma == "en")
-            {
-                Turnos.Text = "Appointments";
-                label1.Text = "Patient";
-                lblNombreProfesional.Text = "Professional";
-                label7.Text = "Appointment Date";
-                label2.Text = "Notes";
-                btnNuevo.Text = "New";
-                btnGuardar.Text = "Save";
-                btnConfirmar.Text = "Confirm";
-                btnCancelar.Text = "Cancel";
-                btnCancelarForm.Text = "Cancel Form";
-                this.Text = "Appointments";
+            Turnos.Text = g.Traducir("grpTurnos");
+            label1.Text = g.Traducir("lblPaciente");
+            lblNombreProfesional.Text = g.Traducir("lblProfesional");
+            label7.Text = g.Traducir("lblFechaTurno");
+            label2.Text = g.Traducir("lblObservaciones");
+            btnNuevo.Text = g.Traducir("btnNuevo");
+            btnGuardar.Text = g.Traducir("btnGuardar");
+            btnConfirmar.Text = g.Traducir("btnConfirmar");
+            btnCancelar.Text = g.Traducir("btnCancelar");
+            btnCancelarForm.Text = g.Traducir("btnCancelarForm");
+            this.Text = g.Traducir("titleTurnos");
 
-                if (dgvTurnos.Columns.Count > 0)
-                {
-                    dgvTurnos.Columns["IDTurno"].HeaderText = "ID";
-                    dgvTurnos.Columns["IDPaciente"].HeaderText = "Patient";
-                    dgvTurnos.Columns["IDProfesional"].HeaderText = "Professional";
-                    dgvTurnos.Columns["FechaHora"].HeaderText = "Date & Time";
-                    dgvTurnos.Columns["Estado"].HeaderText = "Status";
-                    dgvTurnos.Columns["Observaciones"].HeaderText = "Notes";
-                }
+            if (dgvTurnos.Columns.Count > 0)
+            {
+                dgvTurnos.Columns["IDTurno"].HeaderText = g.Traducir("colID");
+                dgvTurnos.Columns["IDPaciente"].HeaderText = g.Traducir("colPaciente");
+                dgvTurnos.Columns["IDProfesional"].HeaderText = g.Traducir("colProfesional");
+                dgvTurnos.Columns["FechaHora"].HeaderText = g.Traducir("colFechaHora");
+                dgvTurnos.Columns["Estado"].HeaderText = g.Traducir("colEstado");
+                dgvTurnos.Columns["Observaciones"].HeaderText = g.Traducir("colObservaciones");
             }
         }
     }

@@ -15,6 +15,8 @@ namespace UI.forms
     public partial class frmUsuario : Form, IObservadorIdioma
     {
         clsUsuarioBLL usuarioBLL = new clsUsuarioBLL();
+        clsRolBLL bllRol = new clsRolBLL();
+        bool puedeAlta, puedeBaja;
         public frmUsuario()
         {
             InitializeComponent();
@@ -22,11 +24,17 @@ namespace UI.forms
 
         private void frmUsuario_Load(object sender, EventArgs e)
         {
+            int idUsuario = clsSesionActual.GetInstancia().IdUsuario;
+            puedeAlta = bllRol.TienePermiso(idUsuario, "Usuarios.Alta");
+            puedeBaja = bllRol.TienePermiso(idUsuario, "Usuarios.Baja");
+
+            btnAlta.Enabled = puedeAlta;
+            btnBaja.Enabled = puedeBaja;
+
             CargarUsuarios();
             personalizarGrilla();
             clsGestorIdioma.GetInstancia().Suscribir(this);
             ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
-
         }
 
         private void btnAlta_Click(object sender, EventArgs e)
@@ -65,9 +73,10 @@ namespace UI.forms
 
             int id = Convert.ToInt32(dgvUsuarios.SelectedRows[0].Cells["IdUsuario"].Value);
 
+            var g = clsGestorIdioma.GetInstancia();
             DialogResult confirm = MessageBox.Show(
-                "¿Eliminás el usuario?",
-                "Confirmar",
+                g.Traducir("msgConfirmarEliminar"),
+                g.Traducir("msgConfirmar"),
                 MessageBoxButtons.YesNo);
 
             if (confirm == DialogResult.Yes)
@@ -136,35 +145,19 @@ namespace UI.forms
         }
         public void ActualizarIdioma(string idioma)
         {
-            if (idioma == "es")
-            {
-                grpUsuarios.Text = "Usuarios";
-                lblNombre.Text = "Usuario";
-                label2.Text = "Clave";
-                btnAlta.Text = "Alta";
-                btnBaja.Text = "Baja";
-                this.Text = "Gestor | Usuarios";
+            var g = clsGestorIdioma.GetInstancia();
 
-                if (dgvUsuarios.Columns.Count > 0)
-                {
-                    dgvUsuarios.Columns["IdUsuario"].HeaderText = "ID";
-                    dgvUsuarios.Columns["NombreUsuario"].HeaderText = "Usuario";
-                }
-            }
-            else if (idioma == "en")
-            {
-                grpUsuarios.Text = "Users";
-                lblNombre.Text = "Username";
-                label2.Text = "Password";
-                btnAlta.Text = "Add";
-                btnBaja.Text = "Remove";
-                this.Text = "Manager | Users";
+            grpUsuarios.Text = g.Traducir("grpUsuarios");
+            lblNombre.Text = g.Traducir("lblUsuario");
+            label2.Text = g.Traducir("lblClave");
+            btnAlta.Text = g.Traducir("btnAlta");
+            btnBaja.Text = g.Traducir("btnBaja");
+            this.Text = g.Traducir("titleUsuarios");
 
-                if (dgvUsuarios.Columns.Count > 0)
-                {
-                    dgvUsuarios.Columns["IdUsuario"].HeaderText = "ID";
-                    dgvUsuarios.Columns["NombreUsuario"].HeaderText = "Username";
-                }
+            if (dgvUsuarios.Columns.Count > 0)
+            {
+                dgvUsuarios.Columns["IdUsuario"].HeaderText = g.Traducir("colID");
+                dgvUsuarios.Columns["NombreUsuario"].HeaderText = g.Traducir("colUsuario");
             }
         }
     }

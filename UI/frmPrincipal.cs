@@ -96,6 +96,13 @@ namespace UI
         private void frmPrincipal_Load(object sender, EventArgs e)
         {
             clsGestorIdioma.GetInstancia().Suscribir(this);
+
+            // Cargar idiomas en el combo
+            cmbIdiomaPrincipal.Items.Clear();
+            cmbIdiomaPrincipal.Items.Add("es");
+            cmbIdiomaPrincipal.Items.Add("en");
+            cmbIdiomaPrincipal.SelectedItem = clsGestorIdioma.GetInstancia().IdiomaActual;
+
             ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
         }
 
@@ -116,9 +123,9 @@ namespace UI
 
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Usuarios.VerBioe"))
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Usuarios.Ver"))
             {
-                MessageBox.Show("Sin permisos.");
+                MessageBox.Show(clsGestorIdioma.GetInstancia().Traducir("msgSinPermisos"));
                 return;
             }
             frmUsuario frm = new frmUsuario();
@@ -127,39 +134,40 @@ namespace UI
         }
         public void ActualizarIdioma(string idioma)
         {
-            if (idioma == "es")
-            {
-                inicioToolStripMenuItem.Text = "Gestiones";
-                informesToolStripMenuItem.Text = "Informes";
-                salirToolStripMenuItem.Text = "Salir";
-                pacientesToolStripMenuItem.Text = "Pacientes";
-                especialidadesToolStripMenuItem.Text = "Especialidades";
-                profesionalesToolStripMenuItem.Text = "Profesionales";
-                aBMToolStripMenuItem.Text = "Turnos";
-                rolesToolStripMenuItem.Text = "Roles";
-                usuariosToolStripMenuItem.Text = "Usuarios";
-                bitacoraToolStripMenuItem.Text = "Bitácora";
-                consultasToolStripMenuItem.Text = "Consultas";
-            }
-            else if (idioma == "en")
-            {
-                inicioToolStripMenuItem.Text = "Management";
-                informesToolStripMenuItem.Text = "Reports";
-                salirToolStripMenuItem.Text = "Exit";
-                pacientesToolStripMenuItem.Text = "Patients";
-                especialidadesToolStripMenuItem.Text = "Specialties";
-                profesionalesToolStripMenuItem.Text = "Professionals";
-                aBMToolStripMenuItem.Text = "Appointments";
-                rolesToolStripMenuItem.Text = "Roles";
-                usuariosToolStripMenuItem.Text = "Users";
-                bitacoraToolStripMenuItem.Text = "Activity Log";
-                consultasToolStripMenuItem.Text = "Queries";
-            }
+            var g = clsGestorIdioma.GetInstancia();
+
+            inicioToolStripMenuItem.Text = g.Traducir("mnuGestiones");
+            informesToolStripMenuItem.Text = g.Traducir("mnuInformes");
+            salirToolStripMenuItem.Text = g.Traducir("mnuSalir");
+            pacientesToolStripMenuItem.Text = g.Traducir("mnuPacientes");
+            especialidadesToolStripMenuItem.Text = g.Traducir("mnuEspecialidades");
+            profesionalesToolStripMenuItem.Text = g.Traducir("mnuProfesionales");
+            aBMToolStripMenuItem.Text = g.Traducir("mnuTurnos");
+            rolesToolStripMenuItem.Text = g.Traducir("mnuRoles");
+            usuariosToolStripMenuItem.Text = g.Traducir("mnuUsuarios");
+            bitacoraToolStripMenuItem.Text = g.Traducir("mnuBitacora");
+            consultasToolStripMenuItem.Text = g.Traducir("mnuConsultas");
         }
 
         private void frmPrincipal_FormClosed(object sender, FormClosedEventArgs e)
         {
             clsGestorIdioma.GetInstancia().Desuscribir(this);
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void cmbIdiomaPrincipal_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmbIdiomaPrincipal_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbIdiomaPrincipal.SelectedItem == null) return;
+            clsGestorIdioma.GetInstancia().CambiarIdioma(cmbIdiomaPrincipal.SelectedItem.ToString());
         }
     }
      

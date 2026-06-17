@@ -37,14 +37,11 @@ namespace UI
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (idSeleccionado <= 0) return;
-            string mensaje = clsGestorIdioma.GetInstancia().IdiomaActual == "es"
-                ? "¿Está seguro que desea eliminar?"
-                : "Are you sure you want to delete?";
-
-            string titulo = clsGestorIdioma.GetInstancia().IdiomaActual == "es"
-                ? "Confirmar"
-                : "Confirm";
-            DialogResult confirm = MessageBox.Show(mensaje, titulo, MessageBoxButtons.YesNo);
+            var g = clsGestorIdioma.GetInstancia();
+            DialogResult confirm = MessageBox.Show(
+                g.Traducir("msgConfirmarEliminar"),
+                g.Traducir("msgConfirmar"),
+                MessageBoxButtons.YesNo);
             if (confirm == DialogResult.Yes)
             {
                 bllPaciente.Delete(idSeleccionado);
@@ -206,61 +203,32 @@ namespace UI
         }
         public void ActualizarIdioma(string idioma)
         {
-            if (idioma == "es")
-            {
-                groupBox1.Text = "Datos del Paciente";
-                lblNombre.Text = "Nombre";
-                lblApellido.Text = "Apellido";
-                lblDNI.Text = "DNI";
-                lblTelefono.Text = "Teléfono";
-                lblEmail.Text = "Email";
-                lblObraSocial.Text = "Obra Social";
-                label7.Text = "Fecha de nacimiento";
-                btnGuardar.Text = "Guardar";
-                btnNuevo.Text = "Nuevo";
-                btnEliminar.Text = "Eliminar";
-                btnCancelar.Text = "Cancelar";
-                this.Text = "Pacientes";
+            var g = clsGestorIdioma.GetInstancia();
 
-                if (dgvPacientes.Columns.Count > 0)
-                {
-                    dgvPacientes.Columns["IdPersona"].HeaderText = "ID";
-                    dgvPacientes.Columns["Nombre"].HeaderText = "Nombre";
-                    dgvPacientes.Columns["Apellido"].HeaderText = "Apellido";
-                    dgvPacientes.Columns["DNI"].HeaderText = "DNI";
-                    dgvPacientes.Columns["Telefono"].HeaderText = "Teléfono";
-                    dgvPacientes.Columns["Email"].HeaderText = "Email";
-                    dgvPacientes.Columns["FechaNacimiento"].HeaderText = "Fecha Nac.";
-                    dgvPacientes.Columns["ObraSocial"].HeaderText = "Obra Social";
-                }
-            }
-            else if (idioma == "en")
-            {
-                groupBox1.Text = "Patient Data";
-                lblNombre.Text = "First Name";
-                lblApellido.Text = "Last Name";
-                lblDNI.Text = "ID Number";
-                lblTelefono.Text = "Phone";
-                lblEmail.Text = "Email";
-                lblObraSocial.Text = "Health Insurance";
-                label7.Text = "Date of Birth";
-                btnGuardar.Text = "Save";
-                btnNuevo.Text = "New";
-                btnEliminar.Text = "Delete";
-                btnCancelar.Text = "Cancel";
-                this.Text = "Patients";
+            groupBox1.Text = g.Traducir("grpPaciente");
+            lblNombre.Text = g.Traducir("lblNombre");
+            lblApellido.Text = g.Traducir("lblApellido");
+            lblDNI.Text = g.Traducir("lblDNI");
+            lblTelefono.Text = g.Traducir("lblTelefono");
+            lblEmail.Text = g.Traducir("lblEmail");
+            lblObraSocial.Text = g.Traducir("lblObraSocial");
+            label7.Text = g.Traducir("lblFechaNac");
+            btnGuardar.Text = g.Traducir("btnGuardar");
+            btnNuevo.Text = g.Traducir("btnNuevo");
+            btnEliminar.Text = g.Traducir("btnEliminar");
+            btnCancelar.Text = g.Traducir("btnCancelar");
+            this.Text = g.Traducir("titlePacientes");
 
-                if (dgvPacientes.Columns.Count > 0)
-                {
-                    dgvPacientes.Columns["IdPersona"].HeaderText = "ID";
-                    dgvPacientes.Columns["Nombre"].HeaderText = "First Name";
-                    dgvPacientes.Columns["Apellido"].HeaderText = "Last Name";
-                    dgvPacientes.Columns["DNI"].HeaderText = "ID Number";
-                    dgvPacientes.Columns["Telefono"].HeaderText = "Phone";
-                    dgvPacientes.Columns["Email"].HeaderText = "Email";
-                    dgvPacientes.Columns["FechaNacimiento"].HeaderText = "Birth Date";
-                    dgvPacientes.Columns["ObraSocial"].HeaderText = "Health Insurance";
-                }
+            if (dgvPacientes.Columns.Count > 0)
+            {
+                dgvPacientes.Columns["IdPersona"].HeaderText = g.Traducir("colID");
+                dgvPacientes.Columns["Nombre"].HeaderText = g.Traducir("colNombre");
+                dgvPacientes.Columns["Apellido"].HeaderText = g.Traducir("colApellido");
+                dgvPacientes.Columns["DNI"].HeaderText = g.Traducir("colDNI");
+                dgvPacientes.Columns["Telefono"].HeaderText = g.Traducir("colTelefono");
+                dgvPacientes.Columns["Email"].HeaderText = g.Traducir("colEmail");
+                dgvPacientes.Columns["FechaNacimiento"].HeaderText = g.Traducir("colFechaNac");
+                dgvPacientes.Columns["ObraSocial"].HeaderText = g.Traducir("colObraSocial");
             }
         }
         private void PersonalizarForm()

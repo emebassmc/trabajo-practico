@@ -40,6 +40,7 @@
             this.consultasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bitacoraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmbIdiomaPrincipal = new System.Windows.Forms.ToolStripComboBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,12 +49,14 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.inicioToolStripMenuItem,
             this.informesToolStripMenuItem,
-            this.salirToolStripMenuItem});
+            this.salirToolStripMenuItem,
+            this.cmbIdiomaPrincipal});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(800, 27);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // inicioToolStripMenuItem
             // 
@@ -65,7 +68,7 @@
             this.rolesToolStripMenuItem,
             this.usuariosToolStripMenuItem});
             this.inicioToolStripMenuItem.Name = "inicioToolStripMenuItem";
-            this.inicioToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
+            this.inicioToolStripMenuItem.Size = new System.Drawing.Size(70, 23);
             this.inicioToolStripMenuItem.Text = "Gestiones";
             this.inicioToolStripMenuItem.Click += new System.EventHandler(this.inicioToolStripMenuItem_Click);
             // 
@@ -117,7 +120,7 @@
             this.consultasToolStripMenuItem,
             this.bitacoraToolStripMenuItem});
             this.informesToolStripMenuItem.Name = "informesToolStripMenuItem";
-            this.informesToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+            this.informesToolStripMenuItem.Size = new System.Drawing.Size(66, 23);
             this.informesToolStripMenuItem.Text = "Informes";
             // 
             // consultasToolStripMenuItem
@@ -137,9 +140,16 @@
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(41, 23);
             this.salirToolStripMenuItem.Text = "Salir";
             this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
+            // 
+            // cmbIdiomaPrincipal
+            // 
+            this.cmbIdiomaPrincipal.Name = "cmbIdiomaPrincipal";
+            this.cmbIdiomaPrincipal.Size = new System.Drawing.Size(121, 23);
+            this.cmbIdiomaPrincipal.SelectedIndexChanged += new System.EventHandler(this.cmbIdiomaPrincipal_SelectedIndexChanged);
+            this.cmbIdiomaPrincipal.Click += new System.EventHandler(this.cmbIdiomaPrincipal_Click);
             // 
             // frmPrincipal
             // 
@@ -174,5 +184,6 @@
         private System.Windows.Forms.ToolStripMenuItem bitacoraToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rolesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem usuariosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox cmbIdiomaPrincipal;
     }
 }

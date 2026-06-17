@@ -25,10 +25,10 @@ namespace UI
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            cmbIdioma.SelectedIndex = 0;
+           
             clsGestorIdioma.GetInstancia().Suscribir(this);
             personalizarForm();
-
+            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);  
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -57,11 +57,7 @@ namespace UI
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbIdioma.SelectedItem == null) return;
-            clsGestorIdioma.GetInstancia().CambiarIdioma(cmbIdioma.SelectedItem.ToString());
-        }
+
 
         private void personalizarForm()
         {
@@ -87,26 +83,16 @@ namespace UI
             button1.FlatStyle = FlatStyle.Flat;
             button1.FlatAppearance.BorderSize = 0;
             button1.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            button1.Cursor = Cursors.Hand;
-
-            cmbIdioma.Font = new Font("Segoe UI", 9);
+            button1.Cursor = Cursors.Hand;            
         }
         public void ActualizarIdioma(string idioma)
         {
-            if (idioma == "es")
-            {
-                lblUsuario.Text = "Usuario";
-                lblContraseña.Text = "Contraseña";
-                lblIdioma.Text = "Idioma";
-                button1.Text = "Ingresar";
-            }
-            else if (idioma == "en")
-            {
-                lblUsuario.Text = "Username";
-                lblContraseña.Text = "Password";
-                lblIdioma.Text = "Language";
-                button1.Text = "Login";
-            }
+            var g = clsGestorIdioma.GetInstancia();
+
+            lblUsuario.Text = g.Traducir("lblUsuario");
+            lblContraseña.Text = g.Traducir("lblClave");
+            lblIdioma.Text = g.Traducir("lblIdioma");
+            button1.Text = g.Traducir("btnIngresar");
         }
         private void lblIdioma_Click(object sender, EventArgs e)
         {

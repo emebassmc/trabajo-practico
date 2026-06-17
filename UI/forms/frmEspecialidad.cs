@@ -15,6 +15,8 @@ namespace UI
     public partial class frmEspecialidad : Form, IObservadorIdioma
     {
         clsEspecialidadBLL bllEspecialidad = new clsEspecialidadBLL();
+        clsRolBLL bllRol = new clsRolBLL();
+        bool puedeAgregar, puedeModificar, puedeEliminar;
         bool modoEdicion = false;
         int idSeleccionado = 0;
 
@@ -25,6 +27,11 @@ namespace UI
 
         private void frmEspecialidad_Load(object sender, EventArgs e)
         {
+            int idUsuario = clsSesionActual.GetInstancia().IdUsuario;
+            puedeAgregar = bllRol.TienePermiso(idUsuario, "Especialidades.Agregar");
+            puedeModificar = bllRol.TienePermiso(idUsuario, "Especialidades.Modificar");
+            puedeEliminar = bllRol.TienePermiso(idUsuario, "Especialidades.Eliminar");
+
             cargarGrilla();
             bloquearCampos();
             clsGestorIdioma.GetInstancia().Suscribir(this);
@@ -62,6 +69,7 @@ namespace UI
         private void btnNuevo_Click(object sender, EventArgs e)
         {
             modoEdicion = false;
+            btnNuevo.Enabled = puedeAgregar;  
             limpiarCampos();
             habilitarCampos();
         }
@@ -104,8 +112,11 @@ namespace UI
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (idSeleccionado <= 0) return;
-            DialogResult confirm = MessageBox.Show("¿Está seguro que desea eliminar?",
-                "Confirmar", MessageBoxButtons.YesNo);
+            var g = clsGestorIdioma.GetInstancia();
+            DialogResult confirm = MessageBox.Show(
+                g.Traducir("msgConfirmarEliminar"),
+                g.Traducir("msgConfirmar"),
+                MessageBoxButtons.YesNo);
             if (confirm == DialogResult.Yes)
             {
                 bllEspecialidad.Delete(idSeleccionado);
@@ -124,7 +135,8 @@ namespace UI
                 txtNombre.Text = fila.Cells["Nombre"].Value.ToString();
                 modoEdicion = true;
                 habilitarCampos();
-                btnEliminar.Enabled = true;
+                btnGuardar.Enabled = puedeModificar;   
+                btnEliminar.Enabled = puedeEliminar;
 
             }
         }
@@ -142,27 +154,15 @@ namespace UI
         }
         public void ActualizarIdioma(string idioma)
         {
-            if (idioma == "es")
-            {
-                groupBox1.Text = "Especialidades";
-                lblNombre.Text = "Nombre";
-                btnNuevo.Text = "Nuevo";
-                btnGuardar.Text = "Guardar";
-                btnEliminar.Text = "Eliminar";
-                btnCancelar.Text = "Cancelar";
-                this.Text = "ABM-Especialidad";
-            }
-            else if (idioma == "en")
-            {
-                groupBox1.Text = "Specialties";
-                lblNombre.Text = "Name";
-                btnNuevo.Text = "New";
-                btnGuardar.Text = "Save";
-                btnEliminar.Text = "Delete";
-                btnCancelar.Text = "Cancel";
-                this.Text = "Specialties";
-            }
+            var g = clsGestorIdioma.GetInstancia();
+
+            groupBox1.Text = g.Traducir("grpEspecialidades");
+            lblNombre.Text = g.Traducir("lblNombre");
+            btnNuevo.Text = g.Traducir("btnNuevo");
+            btnGuardar.Text = g.Traducir("btnGuardar");
+            btnEliminar.Text = g.Traducir("btnEliminar");
+            btnCancelar.Text = g.Traducir("btnCancelar");
+            this.Text = g.Traducir("titleEspecialidades");
         }
     }
 }
-//a

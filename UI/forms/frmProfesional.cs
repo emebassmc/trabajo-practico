@@ -157,8 +157,13 @@ namespace UI
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (idSeleccionado <= 0) return;
-            DialogResult confirm = MessageBox.Show("¿Está seguro que desea eliminar?",
-                "Confirmar", MessageBoxButtons.YesNo);
+
+            var g = clsGestorIdioma.GetInstancia();
+            DialogResult confirm = MessageBox.Show(
+                g.Traducir("msgConfirmarEliminar"),
+                g.Traducir("msgConfirmar"),
+                MessageBoxButtons.YesNo);
+
             if (confirm == DialogResult.Yes)
             {
                 bllprofesional.Delete(idSeleccionado);
@@ -167,7 +172,7 @@ namespace UI
                 limpiarCampos();
             }
         }
-    
+
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -194,35 +199,21 @@ namespace UI
         }
         public void ActualizarIdioma(string idioma)
         {
-            if (idioma == "es")
+            var g = clsGestorIdioma.GetInstancia();
+
+            this.Text = g.Traducir("titleProfesionales");
+
+            if (dataGridView1.Columns.Count > 0)
             {
-                if (dataGridView1.Columns.Count > 0)
-                {
-                    dataGridView1.Columns["IdPersona"].HeaderText = "ID";
-                    dataGridView1.Columns["Nombre"].HeaderText = "Nombre";
-                    dataGridView1.Columns["Apellido"].HeaderText = "Apellido";
-                    dataGridView1.Columns["DNI"].HeaderText = "DNI";
-                    dataGridView1.Columns["Telefono"].HeaderText = "Teléfono";
-                    dataGridView1.Columns["Email"].HeaderText = "Email";
-                    dataGridView1.Columns["FechaNacimiento"].HeaderText = "Fecha Nac.";
-                    dataGridView1.Columns["Matricula"].HeaderText = "Matrícula";
-                    dataGridView1.Columns["IdEspecialidad"].HeaderText = "Especialidad";
-                }
-            }
-            else if (idioma == "en")
-            {
-                if (dataGridView1.Columns.Count > 0)
-                {
-                    dataGridView1.Columns["IdPersona"].HeaderText = "ID";
-                    dataGridView1.Columns["Nombre"].HeaderText = "First Name";
-                    dataGridView1.Columns["Apellido"].HeaderText = "Last Name";
-                    dataGridView1.Columns["DNI"].HeaderText = "ID Number";
-                    dataGridView1.Columns["Telefono"].HeaderText = "Phone";
-                    dataGridView1.Columns["Email"].HeaderText = "Email";
-                    dataGridView1.Columns["FechaNacimiento"].HeaderText = "Birth Date";
-                    dataGridView1.Columns["Matricula"].HeaderText = "License";
-                    dataGridView1.Columns["IdEspecialidad"].HeaderText = "Specialty";
-                }
+                dataGridView1.Columns["IdPersona"].HeaderText = g.Traducir("colID");
+                dataGridView1.Columns["Nombre"].HeaderText = g.Traducir("colNombre");
+                dataGridView1.Columns["Apellido"].HeaderText = g.Traducir("colApellido");
+                dataGridView1.Columns["DNI"].HeaderText = g.Traducir("colDNI");
+                dataGridView1.Columns["Telefono"].HeaderText = g.Traducir("colTelefono");
+                dataGridView1.Columns["Email"].HeaderText = g.Traducir("colEmail");
+                dataGridView1.Columns["FechaNacimiento"].HeaderText = g.Traducir("colFechaNac");
+                dataGridView1.Columns["Matricula"].HeaderText = g.Traducir("colMatricula");
+                dataGridView1.Columns["IdEspecialidad"].HeaderText = g.Traducir("colEspecialidad");
             }
         }
     }

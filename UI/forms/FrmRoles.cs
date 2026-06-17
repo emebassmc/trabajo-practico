@@ -15,11 +15,11 @@ namespace UI.forms
 {
     public partial class Form1 : Form, IObservadorIdioma
     {
-        clsRolBLL bll =new clsRolBLL();
-        clsUsuarioBLL usuarioBLL =new clsUsuarioBLL();
+        clsRolBLL bll = new clsRolBLL();
+        clsUsuarioBLL usuarioBLL = new clsUsuarioBLL();
         clsRolBE rol;
         private bool _actualizandoChecks = false;
-
+        bool puedeCrear, puedeEliminar, puedeAsignar;
         public Form1()
         {
             InitializeComponent();
@@ -240,8 +240,17 @@ namespace UI.forms
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            cargarGrupos();
+            int idUsuario = clsSesionActual.GetInstancia().IdUsuario;
+            puedeCrear = bll.TienePermiso(idUsuario, "Roles.Crear");
+            puedeEliminar = bll.TienePermiso(idUsuario, "Roles.Eliminar");
+            puedeAsignar = bll.TienePermiso(idUsuario, "Roles.Asignar");
 
+            btnCrearGrupo.Enabled = puedeCrear;
+            btnEliminarGrupo.Enabled = puedeEliminar;
+            btnActualizarAsignacion.Enabled = puedeAsignar;  // asignar permisos a grupos
+            btnGuardarUsuario.Enabled = puedeAsignar;     // asignar roles a usuarios
+
+            cargarGrupos();
             CargarArbolPermisos();
             CargarRolesParaUsuario();
             CargarUsuarios();
@@ -297,26 +306,15 @@ namespace UI.forms
         }
         public void ActualizarIdioma(string idioma)
         {
-            if (idioma == "es")
-            {
-                tabPage1.Text = "Grupos";
-                tabPage2.Text = "Usuarios";
-                btnCrearGrupo.Text = "Crear";
-                btnEliminarGrupo.Text = "Eliminar";
-                btnActualizarAsignacion.Text = "Actualizar";
-                btnGuardarUsuario.Text = "Guardar";
-                this.Text = "Roles";
-            }
-            else if (idioma == "en")
-            {
-                tabPage1.Text = "Groups";
-                tabPage2.Text = "Users";
-                btnCrearGrupo.Text = "Create";
-                btnEliminarGrupo.Text = "Delete";
-                btnActualizarAsignacion.Text = "Update";
-                btnGuardarUsuario.Text = "Save";
-                this.Text = "Roles";
-            }
+            var g = clsGestorIdioma.GetInstancia();
+
+            tabPage1.Text = g.Traducir("tabGrupos");
+            tabPage2.Text = g.Traducir("tabUsuarios");
+            btnCrearGrupo.Text = g.Traducir("btnCrear");
+            btnEliminarGrupo.Text = g.Traducir("btnEliminar");
+            btnActualizarAsignacion.Text = g.Traducir("btnActualizar");
+            btnGuardarUsuario.Text = g.Traducir("btnGuardar");
+            this.Text = g.Traducir("titleRoles");
         }
     }
 }

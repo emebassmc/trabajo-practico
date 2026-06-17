@@ -1,24 +1,31 @@
-﻿using System;
+﻿using BE;
+using DAL;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL
 {
     public class clsGestorIdioma
     {
-
-        private List<IObservadorIdioma> _suscriptores;
         private static clsGestorIdioma _instancia;
+        private List<IObservadorIdioma> _suscriptores;
+        private Dictionary<string, string> _traducciones;
+        private clsTraduccionDAL traduccionDAL;
 
-        public string IdiomaActual { get; set;}
+        public string IdiomaActual { get; private set; }
 
         private clsGestorIdioma()
         {
             _suscriptores = new List<IObservadorIdioma>();
+            _traducciones = new Dictionary<string, string>();
+            traduccionDAL = new clsTraduccionDAL();
             IdiomaActual = "es";
+            CargarTraducciones("es");
         }
+        public int GetTotalClaves()
+        {
+            return _traducciones.Count;
+        }
+
         public static clsGestorIdioma GetInstancia()
         {
             if (_instancia == null)
@@ -26,22 +33,38 @@ namespace BLL
             return _instancia;
         }
 
-        public void Suscribir(IObservadorIdioma obs)
+        public void Suscribir(IObservadorIdioma observador)
         {
-            _suscriptores.Add(obs);
+            if (!_suscriptores.Contains(observador))
+                _suscriptores.Add(observador);
         }
 
-        public void Desuscribir(IObservadorIdioma obs)
+        public void Desuscribir(IObservadorIdioma observador)
         {
-            _suscriptores.Remove(obs);
+            if (_suscriptores.Contains(observador))
+                _suscriptores.Remove(observador);
         }
 
-        public void CambiarIdioma(string idioma)
+        public void CambiarIdioma(string codigo)
         {
-            IdiomaActual = idioma;
+            IdiomaActual = codigo;
+            CargarTraducciones(codigo);
             foreach (IObservadorIdioma obs in _suscriptores)
-                obs.ActualizarIdioma(idioma);
+                obs.ActualizarIdioma(codigo);
         }
 
+        // Carga todas las traducciones del idioma en el diccionario
+        private void CargarTraducciones(string codigo)
+        {
+            _traducciones = traduccionDAL.GetDiccionarioPorCodigo(codigo);
+        }
+
+        // Devuelve el texto de una clave; si no existe, devuelve la propia clave
+        public string Traducir(string clave)
+        {
+            if (_traducciones.ContainsKey(clave))
+                return _traducciones[clave];
+            return clave; // fallback: muestra la clave si falta la traducción
+        }
     }
 }

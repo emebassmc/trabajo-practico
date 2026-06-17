@@ -38,33 +38,18 @@ namespace UI.forms
         }
         public void ActualizarIdioma(string idioma)
         {
-            if (idioma == "es")
-            {
-                button1.Text = "Actualizar";
-                this.Text = "Bitácora";
+            var g = clsGestorIdioma.GetInstancia();
 
-                if (dataGridView1.Columns.Count > 0)
-                {
-                    dataGridView1.Columns["Id"].HeaderText = "ID";
-                    dataGridView1.Columns["Fecha"].HeaderText = "Fecha";
-                    dataGridView1.Columns["UsuarioId"].HeaderText = "Usuario";
-                    dataGridView1.Columns["Actividad"].HeaderText = "Actividad";
-                    dataGridView1.Columns["Informacion"].HeaderText = "Información";
-                }
-            }
-            else if (idioma == "en")
-            {
-                button1.Text = "Refresh";
-                this.Text = "Activity Log";
+            button1.Text = g.Traducir("btnRefrescar");
+            this.Text = g.Traducir("titleBitacora");
 
-                if (dataGridView1.Columns.Count > 0)
-                {
-                    dataGridView1.Columns["Id"].HeaderText = "ID";
-                    dataGridView1.Columns["Fecha"].HeaderText = "Date";
-                    dataGridView1.Columns["UsuarioId"].HeaderText = "User";
-                    dataGridView1.Columns["Actividad"].HeaderText = "Activity";
-                    dataGridView1.Columns["Informacion"].HeaderText = "Information";
-                }
+            if (dataGridView1.Columns.Count > 0)
+            {
+                dataGridView1.Columns["Id"].HeaderText = g.Traducir("colID");
+                dataGridView1.Columns["Fecha"].HeaderText = g.Traducir("colFecha");
+                dataGridView1.Columns["UsuarioId"].HeaderText = g.Traducir("colUsuario");
+                dataGridView1.Columns["Actividad"].HeaderText = g.Traducir("colActividad");
+                dataGridView1.Columns["Informacion"].HeaderText = g.Traducir("colInformacion");
             }
         }
 
