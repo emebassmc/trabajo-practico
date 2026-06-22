@@ -25,10 +25,19 @@ namespace UI
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
             clsGestorIdioma.GetInstancia().Suscribir(this);
             personalizarForm();
-            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);  
+            CargarComboIdiomas();
+            ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
+        }
+        private void CargarComboIdiomas()
+        {
+            clsIdiomaBLL bllIdioma = new clsIdiomaBLL();
+            var idiomas = bllIdioma.GetAll();
+            cmbIdioma.Items.Clear();
+            foreach (var idioma in idiomas)
+                cmbIdioma.Items.Add(idioma.Codigo);
+            cmbIdioma.SelectedItem = clsGestorIdioma.GetInstancia().IdiomaActual;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -46,9 +55,7 @@ namespace UI
                 clsUsuarioBE u = usuario.GetByUsername(txtUsuario.Text);
                 clsSesionActual.GetInstancia().IdUsuario = u.IdUsuario;
                 clsSesionActual.GetInstancia().NombreUsuario = txtUsuario.Text;
-                frmPrincipal principal = new frmPrincipal();
-                principal.Show();
-                //this.Close();
+                this.Close();
             }
             else
             {
@@ -63,6 +70,9 @@ namespace UI
         {
             this.BackColor = Color.FromArgb(45, 62, 80);
             this.Text = "TurnoSync — Login";
+
+            cmbIdioma.Font = new Font("Segoe UI", 10);
+            cmbIdioma.FlatStyle = FlatStyle.Flat;
 
             lblUsuario.ForeColor = Color.White;
             lblUsuario.Font = new Font("Segoe UI", 10);
@@ -124,5 +134,10 @@ namespace UI
             clsGestorIdioma.GetInstancia().Desuscribir(this);
         }
 
+        private void cmbIdioma_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbIdioma.SelectedItem == null) return;
+            clsGestorIdioma.GetInstancia().CambiarIdioma(cmbIdioma.SelectedItem.ToString());
+        }
     }
 }

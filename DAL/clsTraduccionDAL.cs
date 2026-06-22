@@ -40,7 +40,7 @@ namespace DAL
             {
                 con.Open();
                 SqlCommand cmd = new SqlCommand(
-                    "SELECT * FROM Traduccion WHERE IdIdioma = @IdIdioma ORDER BY Clave", con);
+                    "SELECT * FROM Traduccion WHERE IdIdioma = @IdIdioma ORDER BY IdTraduccion ASC", con);
                 cmd.Parameters.AddWithValue("@IdIdioma", idIdioma);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
@@ -145,6 +145,51 @@ namespace DAL
                 }
                 catch { tran.Rollback(); return false; }
             }
+        }
+        public int EscanearYGenerarClaves(Dictionary<string, string> claves)
+        {
+            int count = 0;
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    foreach (KeyValuePair<string, string> kvp in claves)
+                    {
+                        SqlCommand cmdCheck = new SqlCommand(
+                            "SELECT COUNT(*) FROM Traduccion WHERE Clave = @Clave AND IdIdioma = 1", con, tran);
+                        cmdCheck.Parameters.AddWithValue("@Clave", kvp.Key);
+                        int existe = (int)cmdCheck.ExecuteScalar();
+
+                        if (existe == 0)
+                        {
+                            SqlCommand cmdInsert = new SqlCommand(
+                                "INSERT INTO Traduccion (IdIdioma, Clave, Texto) VALUES (1, @Clave, @Texto)", con, tran);
+                            cmdInsert.Parameters.AddWithValue("@Clave", kvp.Key);
+                            cmdInsert.Parameters.AddWithValue("@Texto", kvp.Value);
+                            cmdInsert.ExecuteNonQuery();
+                            count++;
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(kvp.Value) && kvp.Value != kvp.Key)
+                            {
+                                SqlCommand cmdUpdate = new SqlCommand(
+                                    @"UPDATE Traduccion SET Texto = @Texto 
+                                      WHERE Clave = @Clave AND IdIdioma = 1 
+                                      AND (Texto = Clave OR Texto = '')", con, tran);
+                                cmdUpdate.Parameters.AddWithValue("@Texto", kvp.Value);
+                                cmdUpdate.Parameters.AddWithValue("@Clave", kvp.Key);
+                                count += cmdUpdate.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                    tran.Commit();
+                }
+                catch { tran.Rollback(); count = 0; }
+            }
+            return count;
         }
 
         private clsTraduccionBE Mapear(SqlDataReader dr)

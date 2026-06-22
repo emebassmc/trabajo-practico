@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BLL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,7 +28,11 @@ namespace UI
                     MessageBoxIcon.Error);
                 return; // no abre el login
             }
-            Application.Run(new frmLogin());
+            frmLogin login = new frmLogin();
+            login.ShowDialog();
+
+            if (clsSesionActual.GetInstancia().IdUsuario > 0)
+                Application.Run(new frmPrincipal());
         }
     }
 }

@@ -97,7 +97,7 @@ namespace BLL
             // PASO 2: componer la jerarquía completa via RolPermiso
             foreach (clsRolBE r in todos)
             {
-                if (!r.EsGrupo) continue;
+                if (!(mapa[r.IdRol] is csRolGrupo)) continue;
 
                 csRolGrupo grupoActual = (csRolGrupo)mapa[r.IdRol];
                 List<clsRolBE> hijos = dal.GetPermisosPorRol(r.IdRol);

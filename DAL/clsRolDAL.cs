@@ -99,13 +99,25 @@ namespace DAL
                     cmdUR.Parameters.AddWithValue("@IdRol", idrol);
                     cmdUR.ExecuteNonQuery();
 
-                    // 2. Borrar hijos del rol (poner IdRolPadre en null)
+                    // 2. Borrar donde el rol es padre en RolPermiso
+                    SqlCommand cmdRP1 = new SqlCommand(
+                        "DELETE FROM RolPermiso WHERE IdRol = @IdRol", con, tran);
+                    cmdRP1.Parameters.AddWithValue("@IdRol", idrol);
+                    cmdRP1.ExecuteNonQuery();
+
+                    // 3. Borrar donde el rol es hijo en RolPermiso
+                    SqlCommand cmdRP2 = new SqlCommand(
+                        "DELETE FROM RolPermiso WHERE IdPermiso = @IdRol", con, tran);
+                    cmdRP2.Parameters.AddWithValue("@IdRol", idrol);
+                    cmdRP2.ExecuteNonQuery();
+
+                    // 4. Borrar hijos del rol (poner IdRolPadre en null)
                     SqlCommand cmdHijos = new SqlCommand(
                         "UPDATE Rol SET IdRolPadre = NULL WHERE IdRolPadre = @IdRol", con, tran);
                     cmdHijos.Parameters.AddWithValue("@IdRol", idrol);
                     cmdHijos.ExecuteNonQuery();
 
-                    // 3. Borrar el rol
+                    // 5. Borrar el rol
                     SqlCommand cmd = new SqlCommand(
                         "DELETE FROM Rol WHERE IdRol = @IdRol", con, tran);
                     cmd.Parameters.AddWithValue("@IdRol", idrol);

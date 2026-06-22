@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="forms\frmIdiomas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="forms\frmIdiomas.Designer.cs">
+      <DependentUpon>frmIdiomas.cs</DependentUpon>
+    </Compile>
     <Compile Include="forms\FrmRoles.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +108,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="forms\frmIdiomas.resx">
+      <DependentUpon>frmIdiomas.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="forms\FrmRoles.resx">
       <DependentUpon>FrmRoles.cs</DependentUpon>
     </EmbeddedResource>

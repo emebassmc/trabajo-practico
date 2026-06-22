@@ -65,6 +65,51 @@ namespace DAL
                 catch { tran.Rollback(); return false; }
             }
         }
+        public bool Update(clsIdiomaBE idioma)
+        {
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand(
+                        "UPDATE Idioma SET Codigo = @Codigo, Nombre = @Nombre WHERE IdIdioma = @IdIdioma", con, tran);
+                    cmd.Parameters.AddWithValue("@Codigo", idioma.Codigo);
+                    cmd.Parameters.AddWithValue("@Nombre", idioma.Nombre);
+                    cmd.Parameters.AddWithValue("@IdIdioma", idioma.IdIdioma);
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+                }
+                catch { tran.Rollback(); return false; }
+            }
+        }
+
+        public bool CrearClavesVaciasParaIdioma(int idIdiomaNuevo)
+        {
+            using (SqlConnection con = clsConexionDAL.GetConnection())
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand(
+                        @"INSERT INTO Traduccion (IdIdioma, Clave, Texto)
+                  SELECT @IdNuevo, Clave, ''
+                  FROM Traduccion 
+                  WHERE IdIdioma = 1
+                  AND Clave NOT IN (
+                      SELECT Clave FROM Traduccion WHERE IdIdioma = @IdNuevo
+                  )", con, tran);
+                    cmd.Parameters.AddWithValue("@IdNuevo", idIdiomaNuevo);
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                    return true;
+                }
+                catch { tran.Rollback(); return false; }
+            }
+        }
 
         private clsIdiomaBE Mapear(SqlDataReader dr)
         {

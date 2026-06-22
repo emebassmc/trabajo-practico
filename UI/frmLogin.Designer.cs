@@ -36,6 +36,7 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.lblIdioma = new System.Windows.Forms.Label();
+            this.cmbIdioma = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // lblUsuario
@@ -104,11 +105,21 @@
             this.lblIdioma.Text = "Idioma";
             this.lblIdioma.Click += new System.EventHandler(this.lblIdioma_Click);
             // 
+            // cmbIdioma
+            // 
+            this.cmbIdioma.FormattingEnabled = true;
+            this.cmbIdioma.Location = new System.Drawing.Point(103, 17);
+            this.cmbIdioma.Name = "cmbIdioma";
+            this.cmbIdioma.Size = new System.Drawing.Size(100, 21);
+            this.cmbIdioma.TabIndex = 8;
+            this.cmbIdioma.SelectedIndexChanged += new System.EventHandler(this.cmbIdioma_SelectedIndexChanged);
+            // 
             // frmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(306, 184);
+            this.Controls.Add(this.cmbIdioma);
             this.Controls.Add(this.lblIdioma);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.txtPassword);
@@ -136,6 +147,7 @@
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label lblIdioma;
+        private System.Windows.Forms.ComboBox cmbIdioma;
     }
 }
 

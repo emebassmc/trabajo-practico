@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.trvPermisos = new System.Windows.Forms.TreeView();
             this.lblPermisos = new System.Windows.Forms.Label();
             this.lblGrupos = new System.Windows.Forms.Label();
             this.txtNombre = new System.Windows.Forms.TextBox();
@@ -38,12 +39,11 @@
             this.btnCrearGrupo = new System.Windows.Forms.Button();
             this.lstGrupos = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.trvRolesUsuario = new System.Windows.Forms.TreeView();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnGuardarUsuario = new System.Windows.Forms.Button();
-            this.chkLstRolesUsuario = new System.Windows.Forms.CheckedListBox();
             this.lstUsuarios = new System.Windows.Forms.ListBox();
-            this.trvPermisos = new System.Windows.Forms.TreeView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -77,6 +77,14 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Grupos";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // trvPermisos
+            // 
+            this.trvPermisos.CheckBoxes = true;
+            this.trvPermisos.Location = new System.Drawing.Point(337, 69);
+            this.trvPermisos.Name = "trvPermisos";
+            this.trvPermisos.Size = new System.Drawing.Size(353, 534);
+            this.trvPermisos.TabIndex = 16;
             // 
             // lblPermisos
             // 
@@ -144,19 +152,26 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.trvRolesUsuario);
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Controls.Add(this.btnGuardarUsuario);
-            this.tabPage2.Controls.Add(this.chkLstRolesUsuario);
             this.tabPage2.Controls.Add(this.lstUsuarios);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(760, 532);
+            this.tabPage2.Size = new System.Drawing.Size(760, 626);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Usuarios";
             this.tabPage2.UseVisualStyleBackColor = true;
-            this.tabPage2.Click += new System.EventHandler(this.tabPage2_Click);
+            // 
+            // trvRolesUsuario
+            // 
+            this.trvRolesUsuario.CheckBoxes = true;
+            this.trvRolesUsuario.Location = new System.Drawing.Point(428, 27);
+            this.trvRolesUsuario.Name = "trvRolesUsuario";
+            this.trvRolesUsuario.Size = new System.Drawing.Size(320, 487);
+            this.trvRolesUsuario.TabIndex = 17;
             // 
             // label2
             // 
@@ -186,14 +201,6 @@
             this.btnGuardarUsuario.UseVisualStyleBackColor = true;
             this.btnGuardarUsuario.Click += new System.EventHandler(this.btnGuardarUsuario_Click);
             // 
-            // chkLstRolesUsuario
-            // 
-            this.chkLstRolesUsuario.FormattingEnabled = true;
-            this.chkLstRolesUsuario.Location = new System.Drawing.Point(428, 30);
-            this.chkLstRolesUsuario.Name = "chkLstRolesUsuario";
-            this.chkLstRolesUsuario.Size = new System.Drawing.Size(303, 484);
-            this.chkLstRolesUsuario.TabIndex = 1;
-            // 
             // lstUsuarios
             // 
             this.lstUsuarios.FormattingEnabled = true;
@@ -202,15 +209,6 @@
             this.lstUsuarios.Size = new System.Drawing.Size(313, 485);
             this.lstUsuarios.TabIndex = 0;
             this.lstUsuarios.SelectedIndexChanged += new System.EventHandler(this.lstUsuarios_SelectedIndexChanged);
-            // 
-            // trvPermisos
-            // 
-            this.trvPermisos.CheckBoxes = true;
-            this.trvPermisos.Location = new System.Drawing.Point(337, 69);
-            this.trvPermisos.Name = "trvPermisos";
-            this.trvPermisos.Size = new System.Drawing.Size(353, 534);
-            this.trvPermisos.TabIndex = 16;
-            this.trvPermisos.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvPermisos_AfterCheck);
             // 
             // Form1
             // 
@@ -243,12 +241,12 @@
         private System.Windows.Forms.ListBox lstGrupos;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button btnGuardarUsuario;
-        private System.Windows.Forms.CheckedListBox chkLstRolesUsuario;
         private System.Windows.Forms.ListBox lstUsuarios;
         private System.Windows.Forms.Label lblPermisos;
         private System.Windows.Forms.Label lblGrupos;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TreeView trvPermisos;
+        private System.Windows.Forms.TreeView trvRolesUsuario;
     }
 }

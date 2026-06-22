@@ -34,10 +34,20 @@ namespace BLL
         #region metodos lectura
         public override List<string> ObtenerPermisos()
         {
+            return ObtenerPermisosInterno(new HashSet<int>());
+        }
+
+        private List<string> ObtenerPermisosInterno(HashSet<int> visitados)
+        {
             List<string> lista = new List<string>();
             foreach (clsComponenteRol hijo in _hijos)
             {
-                lista.AddRange(hijo.ObtenerPermisos());
+                if (visitados.Contains(hijo.IdRol)) continue;
+                visitados.Add(hijo.IdRol);
+                if (hijo is csRolGrupo)
+                    lista.AddRange(((csRolGrupo)hijo).ObtenerPermisosInterno(visitados));
+                else
+                    lista.AddRange(hijo.ObtenerPermisos());
             }
             return lista;
         }

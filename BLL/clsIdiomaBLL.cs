@@ -25,5 +25,15 @@ namespace BLL
             if (idIdioma <= 0) return false;
             return dal.Delete(idIdioma);
         }
+        public bool Update(clsIdiomaBE idioma)
+        {
+            if (idioma.IdIdioma <= 0) return false;
+            if (string.IsNullOrEmpty(idioma.Codigo) || string.IsNullOrEmpty(idioma.Nombre)) return false;
+            return dal.Update(idioma);
+        }
+        public bool CrearClavesVaciasParaIdioma(int idIdiomaNuevo)
+        {
+            return dal.CrearClavesVaciasParaIdioma(idIdiomaNuevo);
+        }
     }
 }

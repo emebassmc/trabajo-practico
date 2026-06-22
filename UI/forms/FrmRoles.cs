@@ -24,26 +24,15 @@ namespace UI.forms
         {
             InitializeComponent();
         }
-
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnCrearGrupo_Click(object sender, EventArgs e)
         {
             try
             {
                 if (string.IsNullOrEmpty(txtNombre.Text)) return;
 
-                DialogResult resp = MessageBox.Show(
-                    "¿Es un grupo?",
-                    "Tipo de rol",
-                    MessageBoxButtons.YesNo);
-
                 clsRolBE rol = new clsRolBE();
                 rol.Nombre = txtNombre.Text;
-                rol.EsGrupo = (resp == DialogResult.Yes);
+                rol.EsGrupo = true;
                 clsRolBE sistema = bll.GetAll().Find(r => r.Nombre == "Sistema");
                 if (sistema == null)
                 {
@@ -53,6 +42,14 @@ namespace UI.forms
                 rol.IdRolPadre = sistema.IdRol;
 
                 bll.Insert(rol);
+
+                clsRolBE creado = bll.GetAll()
+                    .Where(r => r.Nombre == rol.Nombre && r.EsGrupo == rol.EsGrupo)
+                    .OrderByDescending(r => r.IdRol)
+                    .FirstOrDefault();
+                if (creado != null)
+                    bll.AsignarPermiso(sistema.IdRol, creado.IdRol);
+
                 txtNombre.Text = "";
                 cargarGrupos();
                 CargarArbolPermisos();
@@ -127,7 +124,8 @@ namespace UI.forms
                 }
 
                 foreach (TreeNode raiz in trvPermisos.Nodes)
-                    GuardarChecksRecursivo(raiz, grupo.IdRol);
+                    foreach (TreeNode hijo in raiz.Nodes)
+                        GuardarChecksRecursivo(hijo, grupo.IdRol);
 
                 cargarGrupos();
                 CargarArbolPermisos();
@@ -138,20 +136,6 @@ namespace UI.forms
             }
         }
 
-        private void GuardarChecksRecursivo(TreeNode nodo, int idGrupo)
-        {
-            int idPermiso = (int)nodo.Tag;
-            // no asignar el grupo a sí mismo
-            if (idPermiso != idGrupo)
-            {
-                if (nodo.Checked)
-                    bll.AsignarPermiso(idGrupo, idPermiso);
-                else
-                    bll.QuitarPermiso(idGrupo, idPermiso);
-            }
-            foreach (TreeNode hijo in nodo.Nodes)
-                GuardarChecksRecursivo(hijo, idGrupo);
-        }
         private void cargarGrupos()
         {
             List<clsRolBE> todos = bll.GetAll();
@@ -171,21 +155,11 @@ namespace UI.forms
             TreeNode nodoRaiz = new TreeNode(raiz.Nombre);
             nodoRaiz.Tag = raiz.IdRol;
             if (raiz is csRolGrupo)
-                AgregarNodosPermiso(nodoRaiz, (csRolGrupo)raiz);
+                AgregarNodosPermiso(nodoRaiz, (csRolGrupo)raiz, new HashSet<int> { raiz.IdRol });
 
             trvPermisos.Nodes.Add(nodoRaiz);
             trvPermisos.ExpandAll();
-        }
-        private void AgregarNodosPermiso(TreeNode nodo, csRolGrupo grupo)
-        {
-            foreach (clsComponenteRol hijo in grupo.Hijos)
-            {
-                TreeNode nuevoNodo = new TreeNode(hijo.Nombre);
-                nuevoNodo.Tag = hijo.IdRol;
-                if (hijo is csRolGrupo)
-                    AgregarNodosPermiso(nuevoNodo, (csRolGrupo)hijo);
-                nodo.Nodes.Add(nuevoNodo);
-            }
+            CargarRolesParaUsuario();
         }
         private void CargarUsuarios()
         {
@@ -201,12 +175,11 @@ namespace UI.forms
             if (lstUsuarios.SelectedItem == null) return;
             clsUsuarioBE usuario = lstUsuarios.SelectedItem as clsUsuarioBE;
             List<clsRolBE> rolesAsignados = bll.GetRolesUsuario(usuario.IdUsuario);
-            for (int i = 0; i < chkLstRolesUsuario.Items.Count; i++)
-            {
-                clsRolBE rol = chkLstRolesUsuario.Items[i] as clsRolBE;
-                bool estaAsignado = rolesAsignados.Any(r => r.IdRol == rol.IdRol);
-                chkLstRolesUsuario.SetItemChecked(i, estaAsignado);
-            }
+
+            _actualizandoChecks = true;
+            foreach (TreeNode raiz in trvRolesUsuario.Nodes)
+                MarcarAsignados(raiz, rolesAsignados);
+            _actualizandoChecks = false;
         }
 
         // Este guarda los cambios cuando apretás el botón
@@ -214,30 +187,43 @@ namespace UI.forms
         {
             if (lstUsuarios.SelectedItem == null) return;
             clsUsuarioBE usuario = lstUsuarios.SelectedItem as clsUsuarioBE;
-            for (int i = 0; i < chkLstRolesUsuario.Items.Count; i++)
+
+            foreach (TreeNode raiz in trvRolesUsuario.Nodes)
+                foreach (TreeNode hijo in raiz.Nodes)
+                    GuardarRolUsuarioRecursivo(hijo, usuario.IdUsuario);
+
+            CargarUsuarios();
+        }
+        private void GuardarRolUsuarioRecursivo(TreeNode nodo, int idUsuario)
+        {
+            int idRol = (int)nodo.Tag;
+            clsRolBE rolNodo = bll.GetAll().Find(r => r.IdRol == idRol);
+
+            if (rolNodo != null && rolNodo.EsGrupo)
             {
-                clsRolBE rol = chkLstRolesUsuario.Items[i] as clsRolBE;
-                if (chkLstRolesUsuario.GetItemChecked(i))
-                    bll.AsignarARol(usuario.IdUsuario, rol.IdRol);
+                if (nodo.Checked)
+                    bll.AsignarARol(idUsuario, idRol);
                 else
-                    bll.QuitarRolUsuario(usuario.IdUsuario, rol.IdRol);
+                    bll.QuitarRolUsuario(idUsuario, idRol);
             }
+
+            foreach (TreeNode hijo in nodo.Nodes)
+                GuardarRolUsuarioRecursivo(hijo, idUsuario);
         }
         private void CargarRolesParaUsuario()
         {
-            chkLstRolesUsuario.Items.Clear();
-            chkLstRolesUsuario.DisplayMember = "Nombre";
-            List<clsRolBE> lista = bll.GetAll();
-            foreach (clsRolBE rol in lista)
-            {
-                chkLstRolesUsuario.Items.Add(rol);
-            }
-        }
-        private void tabPage2_Click(object sender, EventArgs e)
-        {
+            trvRolesUsuario.Nodes.Clear();
+            clsComponenteRol raiz = bll.GetArbol();
+            if (raiz == null) return;
 
-        }
+            TreeNode nodoRaiz = new TreeNode(raiz.Nombre);
+            nodoRaiz.Tag = raiz.IdRol;
+            if (raiz is csRolGrupo)
+                AgregarNodosPermiso(nodoRaiz, (csRolGrupo)raiz, new HashSet<int> { raiz.IdRol });
 
+            trvRolesUsuario.Nodes.Add(nodoRaiz);
+            trvRolesUsuario.ExpandAll();
+        }
         private void Form1_Shown(object sender, EventArgs e)
         {
             int idUsuario = clsSesionActual.GetInstancia().IdUsuario;
@@ -251,17 +237,11 @@ namespace UI.forms
             btnGuardarUsuario.Enabled = puedeAsignar;     // asignar roles a usuarios
 
             cargarGrupos();
-            CargarArbolPermisos();
-            CargarRolesParaUsuario();
+            CargarArbolPermisos();           
             CargarUsuarios();
             clsGestorIdioma.GetInstancia().Suscribir(this);
             ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
         }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {       
-        }
-
         private void trvPermisos_AfterCheck(object sender, TreeViewEventArgs e)
         {
             if (_actualizandoChecks) return;
@@ -315,6 +295,39 @@ namespace UI.forms
             btnActualizarAsignacion.Text = g.Traducir("btnActualizar");
             btnGuardarUsuario.Text = g.Traducir("btnGuardar");
             this.Text = g.Traducir("titleRoles");
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AgregarNodosPermiso(TreeNode nodo, csRolGrupo grupo, HashSet<int> ramaActual)
+        {
+            foreach (clsComponenteRol hijo in grupo.Hijos)
+            {
+                if (ramaActual.Contains(hijo.IdRol)) continue;
+
+                TreeNode nuevoNodo = new TreeNode(hijo.Nombre);
+                nuevoNodo.Tag = hijo.IdRol;
+
+                if (hijo is csRolGrupo)
+                {
+                    HashSet<int> nuevaRama = new HashSet<int>(ramaActual);
+                    nuevaRama.Add(hijo.IdRol);
+                    AgregarNodosPermiso(nuevoNodo, (csRolGrupo)hijo, nuevaRama);
+                }
+
+                nodo.Nodes.Add(nuevoNodo);
+            }
+        }
+        private void GuardarChecksRecursivo(TreeNode nodo, int idGrupo)
+        {
+            int idPermiso = (int)nodo.Tag;
+            if (idPermiso != idGrupo && nodo.Checked)
+                bll.AsignarPermiso(idGrupo, idPermiso);
+            foreach (TreeNode hijo in nodo.Nodes)
+                GuardarChecksRecursivo(hijo, idGrupo);
         }
     }
 }

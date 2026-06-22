@@ -89,9 +89,11 @@ namespace UI
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            var g = clsGestorIdioma.GetInstancia();
             if (modoEdicion == false)
             {
                 clsProfesionalBE profesional = new clsProfesionalBE();
+               
                 //tiramos los valores de email y telefono a null ya que no aplican a esto.
                 profesional.Email = null;
                 profesional.Telefono = null;
@@ -104,13 +106,9 @@ namespace UI
 
                 bool resultado = bllprofesional.Insert(profesional);
                 if (resultado == true)
-                {
-                    MessageBox.Show("Profesional guardado con exitos");
-                }
+                    MessageBox.Show(g.Traducir("msgGuardadoExito"));
                 else
-                {
-                    MessageBox.Show("No se guardo el Profesional, revisa que esta mal..");
-                }
+                    MessageBox.Show(g.Traducir("msgErrorGuardar"));
             }
             else if (modoEdicion == true)
             {
@@ -127,13 +125,9 @@ namespace UI
                 profesional.IdPersona = idSeleccionado;
                 bool resultado = bllprofesional.Update(profesional);
                 if (resultado == true)
-                {
-                    MessageBox.Show("Profesional actualizado con exitos");
-                }
+                    MessageBox.Show(g.Traducir("msgActualizadoExito"));
                 else
-                {
-                    MessageBox.Show("No se guardo el Profesional, revisa que esta mal..");
-                }
+                    MessageBox.Show(g.Traducir("msgErrorActualizar"));
             }
             cargarGrilla();
             bloquearCampos();
@@ -193,6 +187,16 @@ namespace UI
             }
         }
 
+        private void grpProfesional_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblEspecialidad_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void frmProfesional_FormClosed(object sender, FormClosedEventArgs e)
         {
             clsGestorIdioma.GetInstancia().Desuscribir(this);
@@ -202,6 +206,17 @@ namespace UI
             var g = clsGestorIdioma.GetInstancia();
 
             this.Text = g.Traducir("titleProfesionales");
+            btnNuevo.Text = g.Traducir("btnNuevo");
+            btnGuardar.Text = g.Traducir("btnGuardar");
+            btnEliminar.Text = g.Traducir("btnEliminar");
+            btnCancelar.Text = g.Traducir("btnCancelar");
+            lblNombre.Text = g.Traducir("lblNombre");
+            lblApellido.Text = g.Traducir("lblApellido");
+            lblDNI.Text = g.Traducir("lblDNI");
+            lblMatricula.Text = g.Traducir("lblMatricula");
+            lblEspecialidad.Text = g.Traducir("lblEspecialidad");
+            lblFechaNac.Text = g.Traducir("lblFechaNac");
+            grpProfesional.Text = g.Traducir("grpProfesional");
 
             if (dataGridView1.Columns.Count > 0)
             {

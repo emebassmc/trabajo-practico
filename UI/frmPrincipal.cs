@@ -96,14 +96,19 @@ namespace UI
         private void frmPrincipal_Load(object sender, EventArgs e)
         {
             clsGestorIdioma.GetInstancia().Suscribir(this);
-
-            // Cargar idiomas en el combo
-            cmbIdiomaPrincipal.Items.Clear();
-            cmbIdiomaPrincipal.Items.Add("es");
-            cmbIdiomaPrincipal.Items.Add("en");
-            cmbIdiomaPrincipal.SelectedItem = clsGestorIdioma.GetInstancia().IdiomaActual;
-
+            CargarComboIdiomas();
             ActualizarIdioma(clsGestorIdioma.GetInstancia().IdiomaActual);
+        }
+        private void CargarComboIdiomas()
+        {
+            clsIdiomaBLL bllIdioma = new clsIdiomaBLL();
+            var idiomas = bllIdioma.GetAll();
+
+            cmbIdiomaPrincipal.Items.Clear();
+            foreach (var idioma in idiomas)
+                cmbIdiomaPrincipal.Items.Add(idioma.Codigo);
+
+            cmbIdiomaPrincipal.SelectedItem = clsGestorIdioma.GetInstancia().IdiomaActual;
         }
 
         private void consultasToolStripMenuItem_Click(object sender, EventArgs e)
@@ -161,13 +166,26 @@ namespace UI
 
         private void cmbIdiomaPrincipal_Click(object sender, EventArgs e)
         {
-
+            if (cmbIdiomaPrincipal.SelectedItem == null) return;
+            clsGestorIdioma.GetInstancia().CambiarIdioma(cmbIdiomaPrincipal.SelectedItem.ToString());
         }
 
         private void cmbIdiomaPrincipal_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbIdiomaPrincipal.SelectedItem == null) return;
             clsGestorIdioma.GetInstancia().CambiarIdioma(cmbIdiomaPrincipal.SelectedItem.ToString());
+        }
+
+        private void idiomasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Idiomas.Ver"))
+            {
+                MessageBox.Show("Sin permisos.");
+                return;
+            }
+            frmIdiomas frm = new frmIdiomas();
+            frm.MdiParent = this;
+            frm.Show();
         }
     }
      
