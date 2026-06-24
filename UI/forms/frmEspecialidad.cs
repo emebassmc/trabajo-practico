@@ -14,12 +14,12 @@ namespace UI
 {
     public partial class frmEspecialidad : Form, IObservadorIdioma
     {
+
         clsEspecialidadBLL bllEspecialidad = new clsEspecialidadBLL();
         clsRolBLL bllRol = new clsRolBLL();
         bool puedeAgregar, puedeModificar, puedeEliminar;
         bool modoEdicion = false;
         int idSeleccionado = 0;
-
         public frmEspecialidad()
         {
             InitializeComponent();
@@ -76,6 +76,7 @@ namespace UI
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            var g = clsGestorIdioma.GetInstancia(); 
             clsEspecialidadBE especialidadBE = new clsEspecialidadBE();
             if (modoEdicion == false)
             {
@@ -83,11 +84,11 @@ namespace UI
                 bool resultado = bllEspecialidad.Insert(especialidadBE);
                 if (resultado == true)
                 {
-                    MessageBox.Show("Especialidad guardada con exitos");
+                    MessageBox.Show(g.Traducir("msgGuardadoExito"));
                 }
                 else
                 {
-                    MessageBox.Show("No se guardo la especialidad, revisa que esta mal..");
+                    MessageBox.Show(g.Traducir("msgErrorGuardar"));
                 }
             }
             else if (modoEdicion == true)
@@ -97,12 +98,12 @@ namespace UI
                 bool resultado = bllEspecialidad.Update(especialidadBE);
                 if (resultado == true)
                 {
-                    MessageBox.Show("Especialidad guardada con exitos");
+                    MessageBox.Show(g.Traducir("msgActualizadoExito"));
                 }
                 else
                 {
-                    MessageBox.Show("No se guardo la especialidad, revisa que esta mal..");
-                }
+                    MessageBox.Show(g.Traducir("msgErrorActualizar"));
+                 }
             }
             cargarGrilla();
             bloquearCampos();

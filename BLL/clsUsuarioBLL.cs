@@ -83,15 +83,25 @@ namespace BLL
                 }           
         }
         #region metodos lectura
-        public clsUsuarioBE GetByUsername(string nombreUsuario)
+        public clsUsuarioBE GetByUsername(string username)
         {
             try
             {
-                clsUsuarioDAL dal = new clsUsuarioDAL();
-                return dal.GetByUsername(nombreUsuario);
+                clsUsuarioBE u = dal.GetByUsername(username);
+                if (u != null)
+                {
+                    clsRolBLL rolBll = new clsRolBLL();
+                    u.Roles = rolBll.GetRolesUsuario(u.IdUsuario);
+                }
+                return u;
             }
-            catch (Exception ex) { string v = ex.ToString(); return null; }
+            catch
+            {
+                return null;
+            }
         }
+
+
         public List<clsUsuarioBE> GetAll()
         {
             clsUsuarioDAL dal = new clsUsuarioDAL();

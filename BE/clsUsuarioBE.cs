@@ -11,5 +11,12 @@ namespace BE
         public int IdUsuario { get; set; }
         public string NombreUsuario { get; set; }
         public string PasswordHash { get; set; }
+        public List<clsRolBE> Roles { get; set; }
+
+        public clsUsuarioBE()
+        {
+            Roles = new List<clsRolBE>();
+        }
+
     }
 }

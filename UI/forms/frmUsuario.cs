@@ -16,6 +16,7 @@ namespace UI.forms
     {
         clsUsuarioBLL usuarioBLL = new clsUsuarioBLL();
         clsRolBLL bllRol = new clsRolBLL();
+
         bool puedeAlta, puedeBaja;
         public frmUsuario()
         {
@@ -39,6 +40,8 @@ namespace UI.forms
 
         private void btnAlta_Click(object sender, EventArgs e)
         {
+            var g = clsGestorIdioma.GetInstancia();
+
             if (string.IsNullOrEmpty(txtUsuario.Text)) 
             {
                 MessageBox.Show("Ingresa un usuario");
@@ -56,14 +59,14 @@ namespace UI.forms
             bool resultado = usuarioBLL.Registrar(nuevo);
             if (resultado == true) 
             {
-                MessageBox.Show("Usuario: " + nuevo.NombreUsuario + " creado con éxito");
+                MessageBox.Show(g.Traducir("msgUsuarioCreado") + nuevo.NombreUsuario);
                 txtUsuario.Text = "";
                 txtClave.Text = "";
                 CargarUsuarios();
             }
             else
             {
-                MessageBox.Show("Erorr al generar el usuario ");
+                MessageBox.Show(g.Traducir("msgErrorGuardar"));
             }
         }
 

@@ -14,6 +14,7 @@ namespace UI
 {
     public partial class frmTurnos : Form, IObservadorIdioma
     {
+
         clsTurnosBLL bllTurnos = new clsTurnosBLL();
         clsPacienteBLL bllPaciente = new clsPacienteBLL();
         clsProfesionalBLL bllProfesional = new clsProfesionalBLL();
@@ -79,6 +80,8 @@ namespace UI
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            var g = clsGestorIdioma.GetInstancia();
+
             if (modoEdicion == false)
             {
                 clsTurnoBE turno = new clsTurnoBE();
@@ -90,11 +93,11 @@ namespace UI
                 bool resultado = bllTurnos.Insert(turno);
                 if (resultado == true)
                 {
-                    MessageBox.Show("Turno guardado con exitos");
+                    MessageBox.Show(g.Traducir("msgGuardadoExito"));
                 }
                 else
                 {
-                    MessageBox.Show("Error al guardar el turno, revise los datos ingresados");
+                    MessageBox.Show(g.Traducir("msgErrorGuardar"));
                 }
             }
             cargarGrilla();
@@ -123,6 +126,8 @@ namespace UI
 
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
+            var g = clsGestorIdioma.GetInstancia();
+
             if (idSeleccionado <= 0)
             {
                 MessageBox.Show("Seleccioná un turno primero");
@@ -130,9 +135,9 @@ namespace UI
             }
             bool resultado = bllTurnos.Confirmar(idSeleccionado);
             if (resultado)
-                MessageBox.Show("Turno confirmado");
+                MessageBox.Show(g.Traducir("msgTurnoConfirmado"));
             else
-                MessageBox.Show("No se pudo confirmar el turno");
+                MessageBox.Show(g.Traducir("msgErrorConfirmar"));
 
             cargarGrilla();
             bloquearCampos();

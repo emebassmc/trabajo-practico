@@ -25,7 +25,7 @@ namespace UI
 
             if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Pacientes.Ver"))
             {
-                MessageBox.Show("Sin permisos.");
+                MessageBox.Show(clsGestorIdioma.GetInstancia().Traducir("msgSinPermisos"));
                 return;
             }
             frmPacientes frm = new frmPacientes();
@@ -37,7 +37,7 @@ namespace UI
         {
             if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Turnos.Ver"))
             {
-                MessageBox.Show("Sin permisos.");
+                MessageBox.Show(clsGestorIdioma.GetInstancia().Traducir("msgSinPermisos"));
                 return;
             }
             frmTurnos frm = new frmTurnos();
@@ -49,7 +49,7 @@ namespace UI
         {
             if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Especialidades.Ver"))
             {
-                MessageBox.Show("Sin permisos.");
+                MessageBox.Show(clsGestorIdioma.GetInstancia().Traducir("msgSinPermisos"));
                 return;
             }
             frmEspecialidad frm = new frmEspecialidad();
@@ -61,7 +61,7 @@ namespace UI
         {
             if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Profesionales.Ver"))
             {
-                MessageBox.Show("Sin permisos.");
+                MessageBox.Show(clsGestorIdioma.GetInstancia().Traducir("msgSinPermisos"));
                 return;
             }
             frmProfesional frm = new frmProfesional();
@@ -73,7 +73,7 @@ namespace UI
         {
             if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Bitacora.Ver"))
             {
-                MessageBox.Show("Sin permisos.");
+                MessageBox.Show(clsGestorIdioma.GetInstancia().Traducir("msgSinPermisos"));
                 return;
             }
             frmBitacora frm = new frmBitacora();
@@ -85,7 +85,7 @@ namespace UI
         {
             if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Roles.Ver"))
             {
-                MessageBox.Show("Sin permisos.");
+                MessageBox.Show(clsGestorIdioma.GetInstancia().Traducir("msgSinPermisos"));
                 return;
             }
             Form1 frm = new Form1 ();
@@ -140,7 +140,7 @@ namespace UI
         public void ActualizarIdioma(string idioma)
         {
             var g = clsGestorIdioma.GetInstancia();
-
+            idiomasToolStripMenuItem.Text = g.Traducir("idiomasToolStripMenuItem");
             inicioToolStripMenuItem.Text = g.Traducir("mnuGestiones");
             informesToolStripMenuItem.Text = g.Traducir("mnuInformes");
             salirToolStripMenuItem.Text = g.Traducir("mnuSalir");
@@ -180,7 +180,7 @@ namespace UI
         {
             if (!rolBll.TienePermiso(clsSesionActual.GetInstancia().IdUsuario, "Idiomas.Ver"))
             {
-                MessageBox.Show("Sin permisos.");
+                MessageBox.Show(clsGestorIdioma.GetInstancia().Traducir("msgSinPermisos"));
                 return;
             }
             frmIdiomas frm = new frmIdiomas();

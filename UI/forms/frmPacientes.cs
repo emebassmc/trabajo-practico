@@ -98,6 +98,8 @@ namespace UI
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            var g = clsGestorIdioma.GetInstancia(); // agregar al inicio
+
             if (modoEdicion == false)
             {
                 clsPacienteBE paciente = new clsPacienteBE();
@@ -111,11 +113,11 @@ namespace UI
                 bool resultado = bllPaciente.Insert(paciente);
                 if (resultado == true)
                 {
-                    MessageBox.Show("Paciente guardado con exitos");
+                    MessageBox.Show(g.Traducir("msgGuardadoExito"));
                 }
                 else
                 {
-                    MessageBox.Show("No se guardo el paciente, revisa que esta mal..");
+                    MessageBox.Show(g.Traducir("msgErrorGuardar"));
                 }
             }
             else if (modoEdicion == true)
@@ -132,11 +134,11 @@ namespace UI
                 bool resultado = bllPaciente.Update(paciente);
                 if (resultado == true)
                 {
-                    MessageBox.Show("Paciente actualizado con exitos");
+                    MessageBox.Show(g.Traducir("msgActualizadoExito"));
                 }
                 else
                 {
-                    MessageBox.Show("No se actualizo el paciente, revisa que esta mal..");
+                    MessageBox.Show(g.Traducir("msgErrorActualizar"));
                 }
             }
             cargarGrilla();
