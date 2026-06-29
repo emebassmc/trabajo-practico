@@ -179,33 +179,35 @@ namespace UI.forms
             _actualizandoChecks = true;
             foreach (TreeNode raiz in trvRolesUsuario.Nodes)
                 MarcarAsignados(raiz, rolesAsignados);
+            CargarArbolAsignados(usuario);
             _actualizandoChecks = false;
         }
-
-        // Este guarda los cambios cuando apretás el botón
         private void btnGuardarUsuario_Click(object sender, EventArgs e)
         {
-            if (lstUsuarios.SelectedItem == null) return;
+            if (lstUsuarios.SelectedItems == null) return;
             clsUsuarioBE usuario = lstUsuarios.SelectedItem as clsUsuarioBE;
-
+            //debug
+            foreach (TreeNode raiz in trvRolesUsuario.Nodes)
+                foreach (TreeNode hijo in raiz.Nodes)
+                    if (hijo.Checked) MessageBox.Show("Tildado: " + hijo.Text);
+            //borramos todo lo que haya en el usuario
+            bll.QuitarTodosLosRoles(usuario.IdUsuario);
+            //reinserta los roles seleccionados en la grilla
             foreach (TreeNode raiz in trvRolesUsuario.Nodes)
                 foreach (TreeNode hijo in raiz.Nodes)
                     GuardarRolUsuarioRecursivo(hijo, usuario.IdUsuario);
+            MessageBox.Show("Roles guardados correctamente.");
+            CargarArbolAsignados(usuario);
 
             CargarUsuarios();
+
         }
         private void GuardarRolUsuarioRecursivo(TreeNode nodo, int idUsuario)
         {
             int idRol = (int)nodo.Tag;
-            clsRolBE rolNodo = bll.GetAll().Find(r => r.IdRol == idRol);
 
-            if (rolNodo != null && rolNodo.EsGrupo)
-            {
-                if (nodo.Checked)
-                    bll.AsignarARol(idUsuario, idRol);
-                else
-                    bll.QuitarRolUsuario(idUsuario, idRol);
-            }
+            if (nodo.Checked)
+                bll.AsignarARol(idUsuario, idRol);
 
             foreach (TreeNode hijo in nodo.Nodes)
                 GuardarRolUsuarioRecursivo(hijo, idUsuario);
@@ -300,6 +302,39 @@ namespace UI.forms
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+        private void CargarArbolAsignados(clsUsuarioBE usuario)
+        {
+            trvRolesAsignados.Nodes.Clear();
+
+            List<clsRolBE> rolesAsignados = bll.GetRolesUsuario(usuario.IdUsuario);
+            clsComponenteRol arbol = bll.GetArbol();
+
+            TreeNode nodoUsuario = new TreeNode(usuario.NombreUsuario);
+
+            foreach (clsRolBE rol in rolesAsignados)
+            {
+                clsComponenteRol nodo = bll.BuscarEnArbol(arbol, rol.IdRol);
+                if (nodo == null) continue;
+
+                TreeNode nodoRol = new TreeNode(nodo.Nombre);
+                AgregarHijosLectura(nodoRol, nodo);
+                nodoUsuario.Nodes.Add(nodoRol);
+            }
+
+            trvRolesAsignados.Nodes.Add(nodoUsuario);
+            trvRolesAsignados.ExpandAll();
+        }
+
+        private void AgregarHijosLectura(TreeNode nodoTree, clsComponenteRol componente)
+        {
+            if (!(componente is csRolGrupo)) return;
+            foreach (clsComponenteRol hijo in ((csRolGrupo)componente).Hijos)
+            {
+                TreeNode nodoHijo = new TreeNode(hijo.Nombre);
+                AgregarHijosLectura(nodoHijo, hijo);
+                nodoTree.Nodes.Add(nodoHijo);
+            }
         }
 
         private void AgregarNodosPermiso(TreeNode nodo, csRolGrupo grupo, HashSet<int> ramaActual)

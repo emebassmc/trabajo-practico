@@ -39,18 +39,12 @@
             this.txtCodigo = new System.Windows.Forms.TextBox();
             this.lstIdiomas = new System.Windows.Forms.ListBox();
             this.tabTraducciones = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnEscanearForms = new System.Windows.Forms.Button();
             this.lblSeleccionarIdioma = new System.Windows.Forms.Label();
-            this.lblTexto = new System.Windows.Forms.Label();
-            this.lblClave = new System.Windows.Forms.Label();
-            this.btnEliminarClave = new System.Windows.Forms.Button();
             this.btnGuardarTraduccion = new System.Windows.Forms.Button();
-            this.btnAgregarClave = new System.Windows.Forms.Button();
-            this.txtTexto = new System.Windows.Forms.TextBox();
-            this.txtClave = new System.Windows.Forms.TextBox();
             this.dgvTraducciones = new System.Windows.Forms.DataGridView();
             this.cmbIdioma = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabMenu.SuspendLayout();
             this.tabIdiomas.SuspendLayout();
             this.tabTraducciones.SuspendLayout();
@@ -161,13 +155,7 @@
             this.tabTraducciones.Controls.Add(this.button1);
             this.tabTraducciones.Controls.Add(this.btnEscanearForms);
             this.tabTraducciones.Controls.Add(this.lblSeleccionarIdioma);
-            this.tabTraducciones.Controls.Add(this.lblTexto);
-            this.tabTraducciones.Controls.Add(this.lblClave);
-            this.tabTraducciones.Controls.Add(this.btnEliminarClave);
             this.tabTraducciones.Controls.Add(this.btnGuardarTraduccion);
-            this.tabTraducciones.Controls.Add(this.btnAgregarClave);
-            this.tabTraducciones.Controls.Add(this.txtTexto);
-            this.tabTraducciones.Controls.Add(this.txtClave);
             this.tabTraducciones.Controls.Add(this.dgvTraducciones);
             this.tabTraducciones.Controls.Add(this.cmbIdioma);
             this.tabTraducciones.Location = new System.Drawing.Point(4, 22);
@@ -177,6 +165,16 @@
             this.tabTraducciones.TabIndex = 1;
             this.tabTraducciones.Text = "Traducciones";
             this.tabTraducciones.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(566, 104);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(107, 23);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "Exportar Idiomas";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnEscanearForms
             // 
@@ -197,67 +195,15 @@
             this.lblSeleccionarIdioma.TabIndex = 9;
             this.lblSeleccionarIdioma.Text = "Seleccionar idioma:";
             // 
-            // lblTexto
-            // 
-            this.lblTexto.AutoSize = true;
-            this.lblTexto.Location = new System.Drawing.Point(7, 70);
-            this.lblTexto.Name = "lblTexto";
-            this.lblTexto.Size = new System.Drawing.Size(34, 13);
-            this.lblTexto.TabIndex = 8;
-            this.lblTexto.Text = "Texto";
-            // 
-            // lblClave
-            // 
-            this.lblClave.AutoSize = true;
-            this.lblClave.Location = new System.Drawing.Point(7, 42);
-            this.lblClave.Name = "lblClave";
-            this.lblClave.Size = new System.Drawing.Size(26, 13);
-            this.lblClave.TabIndex = 7;
-            this.lblClave.Text = "Tag";
-            // 
-            // btnEliminarClave
-            // 
-            this.btnEliminarClave.Location = new System.Drawing.Point(171, 93);
-            this.btnEliminarClave.Name = "btnEliminarClave";
-            this.btnEliminarClave.Size = new System.Drawing.Size(75, 23);
-            this.btnEliminarClave.TabIndex = 6;
-            this.btnEliminarClave.Text = "Eliminar";
-            this.btnEliminarClave.UseVisualStyleBackColor = true;
-            this.btnEliminarClave.Click += new System.EventHandler(this.btnEliminarClave_Click);
-            // 
             // btnGuardarTraduccion
             // 
-            this.btnGuardarTraduccion.Location = new System.Drawing.Point(90, 93);
+            this.btnGuardarTraduccion.Location = new System.Drawing.Point(63, 37);
             this.btnGuardarTraduccion.Name = "btnGuardarTraduccion";
-            this.btnGuardarTraduccion.Size = new System.Drawing.Size(75, 23);
+            this.btnGuardarTraduccion.Size = new System.Drawing.Size(107, 23);
             this.btnGuardarTraduccion.TabIndex = 5;
-            this.btnGuardarTraduccion.Text = "Guardar";
+            this.btnGuardarTraduccion.Text = "Actualizar Idioma";
             this.btnGuardarTraduccion.UseVisualStyleBackColor = true;
             this.btnGuardarTraduccion.Click += new System.EventHandler(this.btnGuardarTraduccion_Click);
-            // 
-            // btnAgregarClave
-            // 
-            this.btnAgregarClave.Location = new System.Drawing.Point(9, 93);
-            this.btnAgregarClave.Name = "btnAgregarClave";
-            this.btnAgregarClave.Size = new System.Drawing.Size(75, 23);
-            this.btnAgregarClave.TabIndex = 4;
-            this.btnAgregarClave.Text = "Agregar";
-            this.btnAgregarClave.UseVisualStyleBackColor = true;
-            this.btnAgregarClave.Click += new System.EventHandler(this.btnAgregarClave_Click);
-            // 
-            // txtTexto
-            // 
-            this.txtTexto.Location = new System.Drawing.Point(47, 67);
-            this.txtTexto.Name = "txtTexto";
-            this.txtTexto.Size = new System.Drawing.Size(100, 20);
-            this.txtTexto.TabIndex = 3;
-            // 
-            // txtClave
-            // 
-            this.txtClave.Location = new System.Drawing.Point(39, 39);
-            this.txtClave.Name = "txtClave";
-            this.txtClave.Size = new System.Drawing.Size(100, 20);
-            this.txtClave.TabIndex = 2;
             // 
             // dgvTraducciones
             // 
@@ -276,16 +222,6 @@
             this.cmbIdioma.Size = new System.Drawing.Size(100, 21);
             this.cmbIdioma.TabIndex = 0;
             this.cmbIdioma.SelectedIndexChanged += new System.EventHandler(this.cmbIdioma_SelectedIndexChanged);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(566, 104);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(107, 23);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "Exportar Idiomas";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // frmIdiomas
             // 
@@ -321,13 +257,7 @@
         private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.TextBox txtCodigo;
         private System.Windows.Forms.ListBox lstIdiomas;
-        private System.Windows.Forms.Label lblTexto;
-        private System.Windows.Forms.Label lblClave;
-        private System.Windows.Forms.Button btnEliminarClave;
         private System.Windows.Forms.Button btnGuardarTraduccion;
-        private System.Windows.Forms.Button btnAgregarClave;
-        private System.Windows.Forms.TextBox txtTexto;
-        private System.Windows.Forms.TextBox txtClave;
         private System.Windows.Forms.DataGridView dgvTraducciones;
         private System.Windows.Forms.ComboBox cmbIdioma;
         private System.Windows.Forms.Label lblSeleccionarIdioma;

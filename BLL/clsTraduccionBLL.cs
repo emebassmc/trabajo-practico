@@ -18,12 +18,6 @@ namespace BLL
             return dal.GetClaves();
         }
 
-        public bool Insert(clsTraduccionBE t)
-        {
-            if (t.IdIdioma <= 0) return false;
-            if (string.IsNullOrEmpty(t.Clave) || string.IsNullOrEmpty(t.Texto)) return false;
-            return dal.Insert(t);
-        }
 
         public bool Update(clsTraduccionBE t)
         {
@@ -36,12 +30,6 @@ namespace BLL
         {
             if (idTraduccion <= 0) return false;
             return dal.Delete(idTraduccion);
-        }
-
-        public bool InsertClaveEnTodosLosIdiomas(string clave, string textoDefault)
-        {
-            if (string.IsNullOrEmpty(clave) || string.IsNullOrEmpty(textoDefault)) return false;
-            return dal.InsertClaveEnTodosLosIdiomas(clave, textoDefault);
         }
         public int EscanearYGenerarClaves(Dictionary<string, string> claves)
         {

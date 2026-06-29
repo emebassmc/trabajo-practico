@@ -65,7 +65,7 @@ namespace BLL
             if (IdUsuario <= 0) return new List<clsRolBE>();
             return dal.GetRolesPorUsuario(IdUsuario);
         }
-        private clsComponenteRol BuscarEnArbol(clsComponenteRol nodo, int idBuscado)
+        public clsComponenteRol BuscarEnArbol(clsComponenteRol nodo, int idBuscado)
         {
             if (nodo == null) return null;
             if (nodo.IdRol == idBuscado) return nodo;
@@ -153,6 +153,14 @@ namespace BLL
         public bool QuitarPermiso(int idRol, int idPermiso)
         {
             return dal.QuitarPermiso(idRol, idPermiso);
+        }
+
+        public bool QuitarTodosLosRoles(int idUsuario)
+        {
+
+            if (idUsuario <= 0) return false;
+            clsUsuarioDAL dal = new clsUsuarioDAL();
+            return dal.QuitarRolesUsuario(idUsuario);               
         }
         #endregion
     }

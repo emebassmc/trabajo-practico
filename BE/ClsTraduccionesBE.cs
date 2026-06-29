@@ -11,6 +11,7 @@ namespace BE
         public int IdTraduccion { get; set; }
         public int IdIdioma { get; set; }
         public string Clave { get; set; }
+        public int IdClave { get; set; }
         public string Texto { get; set; }
     }
 }

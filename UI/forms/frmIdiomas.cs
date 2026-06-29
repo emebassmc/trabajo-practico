@@ -33,11 +33,7 @@ namespace UI.forms
             lblNombre.Text = g.Traducir("lblNombre");
             tabIdiomas.Text = g.Traducir("tabIdiomas");
             tabTraducciones.Text = g.Traducir("tabTraducciones");
-            btnAgregarClave.Text = g.Traducir("btnAgregarClave");
             btnGuardarTraduccion.Text = g.Traducir("btnGuardarTraduccion");
-            btnEliminarClave.Text = g.Traducir("btnEliminarClave");
-            lblClave.Text = g.Traducir("lblClave");
-            lblTexto.Text = g.Traducir("lblTexto");
             lblSeleccionarIdioma.Text = g.Traducir("lblIdioma");
         }
 
@@ -192,9 +188,7 @@ namespace UI.forms
             btnAgregar.Enabled = puedeGestionar;
             btnEditar.Enabled = puedeGestionar;
             btnEliminar.Enabled = puedeGestionar;
-            btnAgregarClave.Enabled = puedeGestionar;
             btnGuardarTraduccion.Enabled = puedeGestionar;
-            btnEliminarClave.Enabled = puedeGestionar;
             btnEscanearForms.Enabled = puedeGestionar;
 
             dgvTraducciones.RowHeadersVisible = false;
@@ -220,34 +214,9 @@ namespace UI.forms
             dgvTraducciones.DataSource = null;
             dgvTraducciones.DataSource = bllTraduccion.GetByIdioma(idIdioma);
             dgvTraducciones.Columns["IdIdioma"].Visible = false;
+            dgvTraducciones.Columns["IdClave"].Visible = false;  // ← AGREGAR
+            dgvTraducciones.Columns["IdTraduccion"].Visible = false;  // ← AGREGAR
         }
-
-        private void btnAgregarClave_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(txtClave.Text) || string.IsNullOrEmpty(txtTexto.Text))
-                {
-                    MessageBox.Show("Completá la clave y el texto.");
-                    return;
-                }
-
-                if (bllTraduccion.InsertClaveEnTodosLosIdiomas(txtClave.Text.Trim(), txtTexto.Text.Trim()))
-                {
-                    txtClave.Text = "";
-                    txtTexto.Text = "";
-                    if (cmbIdioma.SelectedItem != null)
-                    {
-                        clsIdiomaBE idioma = cmbIdioma.SelectedItem as clsIdiomaBE;
-                        CargarTraducciones(idioma.IdIdioma);
-                    }
-                }
-                else
-                    MessageBox.Show("No se pudo agregar la clave.");
-            }
-            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
-        }
-
         private void btnGuardarTraduccion_Click(object sender, EventArgs e)
         {
             try
@@ -275,34 +244,6 @@ namespace UI.forms
             catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
         }
 
-        private void btnEliminarClave_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (dgvTraducciones.CurrentRow == null) return;
-
-                clsTraduccionBE t = dgvTraducciones.CurrentRow.DataBoundItem as clsTraduccionBE;
-                if (t == null) return;
-
-                DialogResult confirm = MessageBox.Show(
-                    "¿Eliminás la traducción de la clave '" + t.Clave + "'?",
-                    "Confirmar",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
-
-                if (confirm == DialogResult.Yes)
-                {
-                    if (bllTraduccion.Delete(t.IdTraduccion))
-                    {
-                        clsIdiomaBE idioma = cmbIdioma.SelectedItem as clsIdiomaBE;
-                        if (idioma != null) CargarTraducciones(idioma.IdIdioma);
-                    }
-                    else
-                        MessageBox.Show("No se pudo eliminar.");
-                }
-            }
-            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
-        }
         private void btnEscanearForms_Click(object sender, EventArgs e)
         {
             try
